@@ -27,7 +27,7 @@
 
     <div class="editor-header">
         <div class="d-flex align-items-center">
-            <a href="{{ url('data-budidaya') }}" class="btn btn-sm btn-light me-3"><i class="bi bi-arrow-left"></i> Kembali</a>
+            <a href="{{ url('data-file') }}" class="btn btn-sm btn-light me-3"><i class="bi bi-arrow-left"></i> Kembali</a>
             <div class="title">
                 @if(in_array($ext, ['html', 'docx']))
                     <i class="bi bi-file-earmark-word-fill text-primary me-2 fs-4"></i>
@@ -201,7 +201,7 @@
         function saveTextData(content) {
             setSavingState();
             $.ajax({
-                url: "{{ url('data-budidaya/editor/' . $document->id) }}",
+                url: "{{ url('data-file/editor/' . $document->id) }}",
                 type: 'PUT',
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content'),
@@ -220,7 +220,7 @@
             formData.append('file', blob, filename);
 
             $.ajax({
-                url: "{{ url('data-budidaya/editor/' . $document->id) }}",
+                url: "{{ url('data-file/editor/' . $document->id) }}",
                 type: 'POST', // Use POST with _method=PUT
                 data: formData,
                 processData: false,

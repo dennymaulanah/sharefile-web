@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+    <defs>
+        <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4db6ac" />
+            <stop offset="100%" stop-color="#00796b" />
+        </linearGradient>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="10" stdDeviation="15" flood-color="#004d40" flood-opacity="0.2"/>
+        </filter>
+    </defs>
+    <g transform="translate(100, 70)" filter="url(#shadow)">
+        <path d="M140,50 C140,22.38 117.62,0 90,0 C67.43,0 48.33,14.93 42.06,35.53 C39.11,34.54 35.95,34 32.65,34 C14.62,34 0,48.62 0,66.65 C0,84.68 14.62,99.3 32.65,99.3 L140,99.3 C162.09,99.3 180,81.39 180,59.3 C180,37.21 162.09,19.3 140,19.3 L140,50 Z" fill="url(#cloudGrad)"/>
+        <rect x="50" y="55" width="80" height="60" rx="10" fill="#ffffff" opacity="0.9" />
+        <path d="M65,70 L115,70 M65,85 L100,85" stroke="#4db6ac" stroke-width="6" stroke-linecap="round"/>
+    </g>
+</svg>

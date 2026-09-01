@@ -1,59 +1,89 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Share File
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Share File adalah aplikasi manajemen dokumen berbasis web yang dibangun dengan framework Laravel. Aplikasi ini memungkinkan Anda untuk mengunggah, mengelola, dan mengorganisir file dan folder dengan antarmuka modern yang menggunakan gaya desain _Glassmorphism_.
 
-## About Laravel
+## ✨ Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- 📁 **Manajemen Folder**: Buat struktur folder tanpa batas dan organisir file Anda dengan rapi.
+- ☁️ **Upload & Drag-and-Drop (OS)**: Unggah file dengan sangat cepat dan intuitif. Cukup tarik file dari File Explorer di komputer Anda dan lepaskan (drop) ke area aplikasi untuk langsung mengunggahnya.
+- 🔄 **Pindahkan File/Folder**: Susun ulang file Anda dengan menarik baris file (drag) dan melepaskannya (drop) ke dalam folder tujuan.
+- 🔍 **Pencarian Dokumen**: Cari file atau folder dengan cepat berdasarkan nama atau pemilik.
+- 📝 **Editor Dokumen Web**: Buat dan edit dokumen teks sederhana (HTML/JSON) langsung dari dalam browser.
+- 📦 **Download Folder (ZIP)**: Unduh seluruh isi folder sekaligus dalam bentuk satu file ZIP.
+- 🎨 **UI/UX Modern**: Desain antarmuka _Glassmorphism_ yang elegan, responsif, dilengkapi animasi mikro untuk pengalaman pengguna yang mewah.
+- 📎 **Integrasi MS Office Local**: Buka dan edit file Word/Excel secara otomatis menggunakan aplikasi MS Office lokal (jika diakses melalui jaringan lokal/SMB).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📋 Persyaratan Sistem
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **PHP**: Versi 8.1 atau lebih baru
+- **Composer**: Untuk manajemen dependensi PHP
+- **Ekstensi PHP**: OpenSSL, PDO, Mbstring, Tokenizer, XML, Zip
+- **Database**: MySQL, PostgreSQL, atau SQLite
 
-## Learning Laravel
+## 🚀 Panduan Instalasi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Ikuti langkah-langkah berikut untuk menjalankan aplikasi di lingkungan lokal Anda:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Buka terminal dan arahkan ke direktori proyek:**
 
-## Laravel Sponsors
+    ```bash
+    cd path/to/dashboard
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Instal dependensi proyek menggunakan Composer:**
 
-### Premium Partners
+    ```bash
+    composer install
+    ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+3. **Konfigurasi Environment:**
+   Salin file konfigurasi bawaan dan sesuaikan kredensial database Anda.
 
-## Contributing
+    ```bash
+    cp .env.example .env
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    _Buka file `.env` dan pastikan pengaturan `DB_DATABASE`, `DB_USERNAME`, dll. sudah sesuai dengan database Anda._
 
-## Code of Conduct
+4. **Generate Application Key:**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    ```bash
+    php artisan key:generate
+    ```
 
-## Security Vulnerabilities
+5. **Migrasi Database:**
+   Buat tabel-tabel yang diperlukan di database.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    ```bash
+    php artisan migrate
+    ```
 
-## License
+6. **Tautkan Storage Direktori:**
+   Agar file yang diunggah dapat diakses dari browser, Anda harus membuat symlink storage.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    ```bash
+    php artisan storage:link
+    ```
+
+7. **Jalankan Server Lokal:**
+
+    ```bash
+    php artisan serve
+    ```
+
+8. **Selesai!**
+   Buka browser Anda dan akses aplikasi di: `http://localhost:8000/data-file`
+
+## 💡 Tips Penggunaan Drag and Drop File Explorer
+
+Fitur ini sangat memudahkan Anda mengunggah file tanpa harus membuka jendela pencarian file:
+
+1. Buka halaman **Data File** di browser Anda.
+2. Buka jendela **File Explorer** (Windows) atau **Finder** (Mac).
+3. Klik dan tahan file yang ingin Anda unggah.
+4. Seret (drag) file tersebut ke atas halaman web Share File (ke dalam area kotak data putih). Layar akan memunculkan indikator Drop Zone biru.
+5. Lepaskan (drop) file, dan sistem akan langsung mengunggah file tersebut!
+
+## 📄 Lisensi
+
+Proyek ini bersifat _Open-Source_ dan dirilis di bawah lisensi [MIT](https://opensource.org/licenses/MIT). Framework Laravel adalah hak cipta milik Taylor Otwell.

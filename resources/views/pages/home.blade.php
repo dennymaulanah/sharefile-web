@@ -81,44 +81,44 @@
   <div class="container">
     <div class="row gy-4 align-items-center">
       <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="fade-up">
-        <h1>Bidang Perikanan Budidaya</h1>
-        <p class="mt-3">Selamat datang di portal resmi Perikanan Budidaya dari Dinas Perikanan dan Kelautan Kabupaten Indramayu. Kami berkomitmen untuk memajukan sektor budidaya perikanan yang berkelanjutan dan menyejahterakan masyarakat pesisir.</p>
+        <h1>ShareFile</h1>
+        <p class="mt-3">Selamat datang di ShareFile, platform manajemen dokumen terpusat yang memudahkan Anda menyimpan, memantau, dan membagikan berkas secara aman dan efisien. Terorganisir, transparan, dan mudah diakses dari mana saja.</p>
         <div class="d-flex mt-4">
-              <a href="{{ url('/data-budidaya') }}" class="btn btn-calm rounded-pill px-4 py-2 shadow-sm fw-medium"><i class="bi bi-cloud-arrow-up-fill me-2"></i> Mulai Berbagi Data</a>
+              <a href="{{ url('/data-file') }}" class="btn btn-calm rounded-pill px-4 py-2 shadow-sm fw-medium"><i class="bi bi-cloud-arrow-up-fill me-2"></i> Mulai Kelola File</a>
         </div>
       </div>
       <div class="col-lg-6 order-1 order-lg-2 text-center" data-aos="zoom-out" data-aos-delay="100">
-        <img src="{{ asset('assets/img/aquaculture_hero.jpg') }}" class="img-fluid img-calm" alt="Ilustrasi Perikanan Budidaya">
+        <img src="{{ asset('assets/img/sharefile_hero.svg') }}" class="img-fluid img-calm" alt="Ilustrasi ShareFile">
       </div>
     </div>
   </div>
 </section>
 
-<!-- About / Budidaya Section -->
-<section id="budidaya" class="about-calm section">
+<!-- About Section -->
+<section id="about" class="about-calm section">
   <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
-    <span>Aktivitas Kami</span>
-    <h2>Pengembangan Budidaya</h2>
+    <span>Fitur Kami</span>
+    <h2>Mengapa Memilih ShareFile?</h2>
   </div><!-- End Section Title -->
 
   <div class="container">
     <div class="row gy-5 align-items-center">
       <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-        <img src="{{ asset('assets/img/aquaculture_about.jpg') }}" class="img-fluid img-calm" alt="Aktivitas Perikanan">
+        <img src="{{ asset('assets/img/sharefile_about.svg') }}" class="img-fluid img-calm" alt="Aktivitas ShareFile">
       </div>
       <div class="col-lg-6 content ps-lg-5" data-aos="fade-up" data-aos-delay="200">
-        <h3>Ekosistem yang Sehat dan Produktif</h3>
+        <h3>Ekosistem Dokumen yang Cerdas & Terorganisir</h3>
         <p>
-          Kami memantau secara berkala kondisi perairan dan lahan budidaya untuk memastikan hasil panen yang maksimal dengan tetap menjaga keseimbangan ekosistem alam yang berkelanjutan.
+          Kami memastikan seluruh dokumen Anda tersimpan dengan rapi, mudah dicari, dan dapat dikelola kapan saja tanpa kendala, meningkatkan produktivitas tim dan individu.
         </p>
         <ul class="list-unstyled mt-4">
-          <li class="d-flex mb-3"><i class="bi bi-check-circle-fill fs-5 me-3" style="color: #26a69a !important;"></i> <span>Penerapan teknologi modern dan ramah lingkungan pada tambak.</span></li>
-          <li class="d-flex mb-3"><i class="bi bi-check-circle-fill fs-5 me-3" style="color: #26a69a !important;"></i> <span>Pemberdayaan dan pendampingan Kelompok Pembudidaya Ikan (Pokdakan).</span></li>
-          <li class="d-flex mb-3"><i class="bi bi-check-circle-fill fs-5 me-3" style="color: #26a69a !important;"></i> <span>Sistem pelaporan, manajemen, dan pengelolaan data yang terintegrasi.</span></li>
+          <li class="d-flex mb-3"><i class="bi bi-check-circle-fill fs-5 me-3" style="color: #26a69a !important;"></i> <span>Unggah file super cepat melalui mekanisme drag-and-drop langsung dari OS Anda.</span></li>
+          <li class="d-flex mb-3"><i class="bi bi-check-circle-fill fs-5 me-3" style="color: #26a69a !important;"></i> <span>Sistem manajemen folder tak terbatas untuk pengelompokan arsip yang optimal.</span></li>
+          <li class="d-flex mb-3"><i class="bi bi-check-circle-fill fs-5 me-3" style="color: #26a69a !important;"></i> <span>Integrasi canggih dengan Office Lokal (Word, Excel) dan Editor Web internal.</span></li>
         </ul>
         <p class="mt-4">
-          Dengan integrasi pendataan melalui portal <strong>Share Budidaya</strong>, setiap kegiatan operasional dapat dipantau, dievaluasi, dan dikembangkan secara lebih transparan dan efisien.
+          Dengan integrasi pendataan melalui portal <strong>ShareFile</strong>, setiap pencarian dan kolaborasi dokumen dapat dilakukan secara lebih transparan, aman, dan efisien.
         </p>
       </div>
     </div>

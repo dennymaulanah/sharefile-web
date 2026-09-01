@@ -31,7 +31,7 @@ class DocumentController extends Controller
 
         $query->orderBy('is_folder', 'desc')->orderBy('created_at', 'desc');
         $documents = $query->get();
-        return view('pages.data-budidaya', compact('documents', 'currentFolder'));
+        return view('pages.data-file', compact('documents', 'currentFolder'));
     }
 
     public function upload(Request $request)
@@ -45,7 +45,7 @@ class DocumentController extends Controller
             $file = $request->file('file');
             $originalName = $file->getClientOriginalName();
             $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('budidaya_documents', $filename, 'public');
+            $path = $file->storeAs('file_documents', $filename, 'public');
 
             Document::create([
                 'original_name' => $originalName,
@@ -97,7 +97,7 @@ class DocumentController extends Controller
         $isWord = $request->type == 'word';
         $filename = $uuid . ($isWord ? '.html' : '.json');
         $mimeType = $isWord ? 'text/html' : 'application/json';
-        $path = 'budidaya_documents/' . $filename;
+        $path = 'file_documents/' . $filename;
         
         $initialContent = $isWord ? '<h1>' . e($request->title) . '</h1><p>Mulai mengetik di sini...</p>' : '{}';
         Storage::disk('public')->put($path, $initialContent);
@@ -111,7 +111,7 @@ class DocumentController extends Controller
             'owner_name' => $request->owner_name
         ]);
 
-        return redirect('data-budidaya/editor/' . $doc->id);
+        return redirect('data-file/editor/' . $doc->id);
     }
 
     public function editor($id)

@@ -4,13 +4,13 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Dashboard Perikanan Budidaya</title>
+  <title>ShareFile Dashboard</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
   <!-- Favicons -->
-  <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
-  <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+  <link href="{{ asset('assets/img/favicon.svg') }}" rel="icon" type="image/svg+xml">
+  <link href="{{ asset('assets/img/favicon.png') }}" rel="apple-touch-icon">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -35,13 +35,13 @@
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
       <a href="{{ url('/') }}" class="logo d-flex align-items-center me-auto">
-        <h1 class="sitename">Perikanan Budidaya</h1>
+        <h1 class="sitename">ShareFile</h1>
       </a>
 
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="{{ url('/#hero') }}" class="{{ request()->is('/') ? 'active' : '' }}">Home</a></li>
-          <li><a href="{{ url('/data-budidaya') }}" class="{{ request()->is('data-budidaya') ? 'active' : '' }}">Share Budidaya</a></li>
+          <li><a href="{{ url('/data-file') }}" class="{{ request()->is('data-file') ? 'active' : '' }}">Share File</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
