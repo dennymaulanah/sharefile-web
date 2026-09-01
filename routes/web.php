@@ -7,14 +7,14 @@ Route::get('/', function () {
     return view('pages.home');
 });
 
-Route::get('/data-file', [DocumentController::class, 'index']);
-Route::post('/data-file/upload', [DocumentController::class, 'upload']);
-Route::post('/data-file/folder', [DocumentController::class, 'createFolder']);
-Route::put('/data-file/rename/{id}', [DocumentController::class, 'rename']);
-Route::put('/data-file/move/{id}', [DocumentController::class, 'move']);
-Route::get('/data-file/folder-download/{id}', [DocumentController::class, 'downloadFolder']);
-Route::post('/data-file/create-web-doc', [DocumentController::class, 'createWebDoc']);
-Route::get('/data-file/editor/{id}', [DocumentController::class, 'editor']);
-Route::put('/data-file/editor/{id}', [DocumentController::class, 'updateWebDoc']);
-Route::get('/data-file/download/{id}', [DocumentController::class, 'download']);
-Route::delete('/data-file/{id}', [DocumentController::class, 'destroy']);
+Route::get('/data-File', [DocumentController::class, 'index']);
+Route::post('/data-File/upload', [DocumentController::class, 'upload']);
+Route::post('/data-File/folder', [DocumentController::class, 'createFolder']);
+Route::put('/data-File/rename/{id}', [DocumentController::class, 'rename']);
+Route::put('/data-File/move/{id}', [DocumentController::class, 'move']);
+Route::get('/data-File/folder-download/{id}', [DocumentController::class, 'downloadFolder']);
+Route::post('/data-File/create-web-doc', [DocumentController::class, 'createWebDoc']);
+Route::get('/data-File/editor/{id}', [DocumentController::class, 'editor']);
+Route::put('/data-File/editor/{id}', [DocumentController::class, 'updateWebDoc']);
+Route::get('/data-File/download/{id}', [DocumentController::class, 'download']);
+Route::delete('/data-File/{id}', [DocumentController::class, 'destroy']);

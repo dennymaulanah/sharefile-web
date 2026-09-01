@@ -40,8 +40,8 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="{{ url('/#hero') }}" class="{{ request()->is('/') ? 'active' : '' }}">Home</a></li>
-          <li><a href="{{ url('/data-file') }}" class="{{ request()->is('data-file') ? 'active' : '' }}">Share File</a></li>
+          <li><a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Home</a></li>
+          <li><a href="{{ url('/data-File') }}" class="{{ request()->is('data-File') ? 'active' : '' }}">Share File</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>

@@ -84,7 +84,7 @@
         <h1>ShareFile</h1>
         <p class="mt-3">Selamat datang di ShareFile, platform manajemen dokumen terpusat yang memudahkan Anda menyimpan, memantau, dan membagikan berkas secara aman dan efisien. Terorganisir, transparan, dan mudah diakses dari mana saja.</p>
         <div class="d-flex mt-4">
-              <a href="{{ url('/data-file') }}" class="btn btn-calm rounded-pill px-4 py-2 shadow-sm fw-medium"><i class="bi bi-cloud-arrow-up-fill me-2"></i> Mulai Kelola File</a>
+              <a href="{{ url('/data-File') }}" class="btn btn-calm rounded-pill px-4 py-2 shadow-sm fw-medium"><i class="bi bi-cloud-arrow-up-fill me-2"></i> Mulai Kelola File</a>
         </div>
       </div>
       <div class="col-lg-6 order-1 order-lg-2 text-center" data-aos="zoom-out" data-aos-delay="100">

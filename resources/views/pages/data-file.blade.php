@@ -438,9 +438,12 @@
                     <!-- Search -->
                     <form action="{{ url('/data-File') }}" method="GET" class="search-wrapper d-flex align-items-center px-3 py-1">
                         <i class="bi bi-search text-muted"></i>
+                        @if(request('folder'))
+                        <input type="hidden" name="folder" value="{{ request('folder') }}">
+                        @endif
                         <input type="text" name="q" class="form-control border-0 shadow-none py-2 px-3" placeholder="Cari dokumen..." value="{{ request('q') }}">
                         @if(request('q'))
-                        <a href="{{ url('/data-File') }}" class="text-muted hover-primary ms-2"><i class="bi bi-x-circle-fill"></i></a>
+                        <a href="{{ url('/data-File') }}{{ request('folder') ? '?folder='.request('folder') : '' }}" class="text-muted hover-primary ms-2"><i class="bi bi-x-circle-fill"></i></a>
                         @endif
                     </form>
 

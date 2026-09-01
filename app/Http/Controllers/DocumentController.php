@@ -9,20 +9,74 @@ use Illuminate\Support\Str;
 
 class DocumentController extends Controller
 {
+    private function generateUniqueName($originalName, $parentId, $isFolder = false, $ignoreId = null)
+    {
+        $name = pathinfo($originalName, PATHINFO_FILENAME);
+        $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+        $newName = $originalName;
+        $counter = 1;
+
+        while (true) {
+            $query = Document::where('original_name', $newName)
+                ->where('parent_id', $parentId)
+                ->where('is_folder', $isFolder);
+                
+            if ($ignoreId) {
+                $query->where('id', '!=', $ignoreId);
+            }
+
+            if (!$query->exists()) {
+                break;
+            }
+
+            if ($extension && !$isFolder) {
+                $newName = $name . ' (' . $counter . ').' . $extension;
+            } else {
+                $newName = $originalName . ' (' . $counter . ')';
+            }
+            $counter++;
+        }
+
+        return $newName;
+    }
+
+    private function getAllDescendantIds($folderId)
+    {
+        $ids = [];
+        $children = Document::where('parent_id', $folderId)->where('is_folder', true)->pluck('id')->toArray();
+        foreach ($children as $childId) {
+            $ids[] = $childId;
+            $ids = array_merge($ids, $this->getAllDescendantIds($childId));
+        }
+        return $ids;
+    }
+
     public function index(Request $request)
     {
         $currentFolder = null;
         
+        if ($request->has('folder') && $request->folder != '') {
+            $currentFolder = Document::where('is_folder', true)->findOrFail($request->folder);
+        }
+        
         if ($request->has('q') && $request->q != '') {
-            // Jika sedang mencari, tampilkan semua hasil tanpa mempedulikan struktur folder
             $searchTerm = $request->q;
             $query = Document::where(function($q) use ($searchTerm) {
                 $q->where('original_name', 'like', "%{$searchTerm}%")
                   ->orWhere('owner_name', 'like', "%{$searchTerm}%");
             });
+
+            if ($currentFolder) {
+                $descendantFolderIds = $this->getAllDescendantIds($currentFolder->id);
+                $allowedParentIds = array_merge([$currentFolder->id], $descendantFolderIds);
+                
+                $query->where(function($q) use ($allowedParentIds, $currentFolder) {
+                    $q->whereIn('parent_id', $allowedParentIds)
+                      ->orWhere('id', $currentFolder->id); // Optionally include the folder itself if it matches
+                });
+            }
         } else {
-            if ($request->has('folder') && $request->folder != '') {
-                $currentFolder = Document::where('is_folder', true)->findOrFail($request->folder);
+            if ($currentFolder) {
                 $query = Document::where('parent_id', $currentFolder->id);
             } else {
                 $query = Document::whereNull('parent_id');
@@ -43,8 +97,17 @@ class DocumentController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $originalName = $file->getClientOriginalName();
-            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $originalName = $this->generateUniqueName($file->getClientOriginalName(), $request->parent_id, false);
+            
+            $filename = $originalName;
+            $name = pathinfo($filename, PATHINFO_FILENAME);
+            $extension = pathinfo($filename, PATHINFO_EXTENSION);
+            $counter = 1;
+            while (Storage::disk('public')->exists('file_documents/' . $filename)) {
+                $filename = $name . '_' . $counter . '.' . $extension;
+                $counter++;
+            }
+
             $path = $file->storeAs('file_documents', $filename, 'public');
 
             Document::create([
@@ -71,8 +134,10 @@ class DocumentController extends Controller
             'parent_id' => 'nullable|exists:documents,id'
         ]);
 
+        $folderName = $this->generateUniqueName($request->folder_name, $request->parent_id, true);
+
         Document::create([
-            'original_name' => $request->folder_name,
+            'original_name' => $folderName,
             'filename' => Str::uuid(),
             'path' => '',
             'file_size' => 0,
@@ -93,17 +158,27 @@ class DocumentController extends Controller
             'type' => 'required|in:word,excel'
         ]);
 
-        $uuid = Str::uuid();
+        $title = $this->generateUniqueName($request->title, null, false);
+        
         $isWord = $request->type == 'word';
-        $filename = $uuid . ($isWord ? '.html' : '.json');
+        $filename = $title . ($isWord ? '.html' : '.json');
+        
+        $name = pathinfo($filename, PATHINFO_FILENAME);
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $counter = 1;
+        while (Storage::disk('public')->exists('file_documents/' . $filename)) {
+            $filename = $name . '_' . $counter . '.' . $extension;
+            $counter++;
+        }
+        
         $mimeType = $isWord ? 'text/html' : 'application/json';
         $path = 'file_documents/' . $filename;
         
-        $initialContent = $isWord ? '<h1>' . e($request->title) . '</h1><p>Mulai mengetik di sini...</p>' : '{}';
+        $initialContent = $isWord ? '<h1>' . e($title) . '</h1><p>Mulai mengetik di sini...</p>' : '{}';
         Storage::disk('public')->put($path, $initialContent);
 
         $doc = Document::create([
-            'original_name' => $request->title,
+            'original_name' => $title,
             'filename' => $filename,
             'path' => $path,
             'file_size' => strlen($initialContent),
@@ -208,8 +283,10 @@ class DocumentController extends Controller
         ]);
 
         $document = Document::findOrFail($id);
+        $newName = $this->generateUniqueName($request->new_name, $document->parent_id, $document->is_folder, $document->id);
+        
         $document->update([
-            'original_name' => $request->new_name
+            'original_name' => $newName
         ]);
 
         return redirect()->back()->with('success', 'Nama berhasil diubah.');
