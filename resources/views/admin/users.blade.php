@@ -5,10 +5,10 @@
 @section('page-subtitle', 'Kelola akun yang memiliki akses ke dalam sistem')
 
 @section('content')
-<div class="card-custom p-4 mb-4">
+<div class="card-custom p-3 p-sm-4 mb-3 mb-md-4">
   <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
     <!-- Search Form -->
-    <form action="{{ route('admin.users') }}" method="GET" class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 500px;">
+    <form action="{{ route('admin.users') }}" method="GET" class="d-flex flex-wrap flex-sm-nowrap align-items-center gap-2 flex-grow-1 w-100 w-lg-auto" style="max-width: 500px;">
       <div class="input-group">
         <span class="input-group-text bg-light border-end-0 text-muted">
           <i class="bi bi-search"></i>
@@ -17,10 +17,10 @@
           type="text" 
           name="q" 
           class="form-control border-start-0 ps-0" 
-          placeholder="Cari berdasarkan nama, username, atau email..." 
+          placeholder="Cari nama, username, atau email..." 
           value="{{ request('q') }}">
       </div>
-      <select name="role" class="form-select" style="max-width: 160px;" onchange="this.form.submit()">
+      <select name="role" class="form-select flex-shrink-0" style="max-width: 150px;" onchange="this.form.submit()">
         <option value="" {{ !request('role') ? 'selected' : '' }}>Semua Peran</option>
         <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
         <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>User</option>
@@ -33,7 +33,7 @@
     </form>
 
     <!-- Add User Button -->
-    <button type="button" class="btn btn-teal text-white rounded-pill px-4 d-flex align-items-center gap-2" style="background-color: #0d9488; border: none;" data-bs-toggle="modal" data-bs-target="#addUserModal">
+    <button type="button" class="btn btn-teal text-white rounded-pill px-4 d-flex align-items-center justify-content-center gap-2 w-100 w-sm-auto" style="background-color: #0d9488; border: none;" data-bs-toggle="modal" data-bs-target="#addUserModal">
       <i class="bi bi-person-plus-fill"></i>
       <span>Tambah Pengguna</span>
     </button>
@@ -41,7 +41,7 @@
 </div>
 
 <!-- Users Table Card -->
-<div class="card-custom p-4">
+<div class="card-custom p-3 p-sm-4">
   <div class="d-flex align-items-center justify-content-between mb-3">
     <div>
       <h3 class="h6 fw-bold mb-0 text-dark">Daftar Akun Pengguna</h3>
@@ -55,10 +55,10 @@
         <thead>
           <tr>
             <th>Pengguna</th>
-            <th>Username</th>
-            <th>Email</th>
+            <th class="d-none d-sm-table-cell">Username</th>
+            <th class="d-none d-md-table-cell">Email</th>
             <th>Peran (Role)</th>
-            <th>Tanggal Terdaftar</th>
+            <th class="d-none d-lg-table-cell">Tanggal Terdaftar</th>
             <th class="text-end">Tindakan</th>
           </tr>
         </thead>
@@ -70,37 +70,41 @@
             <tr>
               <td>
                 <div class="d-flex align-items-center gap-2">
-                  <div class="user-avatar" style="width: 38px; height: 38px; font-size: 0.95rem;">
+                  <div class="user-avatar flex-shrink-0" style="width: 38px; height: 38px; font-size: 0.95rem;">
                     {{ strtoupper(substr($user->name, 0, 1)) }}
                   </div>
-                  <div>
-                    <div class="fw-semibold text-dark">
+                  <div class="overflow-hidden min-w-0">
+                    <div class="fw-semibold text-dark text-truncate">
                       {{ $user->name }}
                       @if($isSelf)
                         <span class="badge bg-teal ms-1" style="background-color: #0d9488; font-size: 0.65rem;">Anda</span>
                       @endif
                     </div>
+                    <!-- Mobile secondary metadata -->
+                    <div class="small text-muted d-sm-none text-truncate" style="font-size: 0.72rem;">
+                      {{ '@' . $user->username }} &bull; {{ $user->email }}
+                    </div>
                   </div>
                 </div>
               </td>
-              <td>
+              <td class="d-none d-sm-table-cell">
                 <code class="text-teal fw-bold">@ {{ $user->username ?? '-' }}</code>
               </td>
-              <td>
+              <td class="d-none d-md-table-cell">
                 <span class="text-muted small">{{ $user->email }}</span>
               </td>
               <td>
                 @if($user->role === 'admin')
                   <span class="badge badge-soft-success">
-                    <i class="bi bi-shield-check me-1"></i> Administrator
+                    <i class="bi bi-shield-check me-1"></i> Admin
                   </span>
                 @else
                   <span class="badge badge-soft-primary">
-                    <i class="bi bi-person me-1"></i> Pengguna Biasa
+                    <i class="bi bi-person me-1"></i> User
                   </span>
                 @endif
               </td>
-              <td>
+              <td class="d-none d-lg-table-cell">
                 <span class="text-muted small">{{ $user->created_at ? $user->created_at->format('d M Y H:i') : '-' }}</span>
               </td>
               <td class="text-end">

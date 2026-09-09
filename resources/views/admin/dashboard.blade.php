@@ -6,9 +6,9 @@
 
 @section('content')
 <!-- KPI Metric Cards -->
-<div class="row g-4 mb-4">
+<div class="row g-2 g-sm-3 g-xl-4 mb-3 mb-md-4">
   <!-- Total Files -->
-  <div class="col-12 col-sm-6 col-xl-3">
+  <div class="col-6 col-md-6 col-xl-3">
     <div class="card-custom metric-card h-100">
       <div class="metric-icon" style="background-color: #ecfeff; color: #0891b2;">
         <i class="bi bi-file-earmark-text-fill"></i>
@@ -16,13 +16,13 @@
       <div>
         <div class="metric-title">Total Berkas</div>
         <div class="metric-value text-dark">{{ number_format($totalFiles) }}</div>
-        <small class="text-muted" style="font-size: 0.75rem;">Berkas tersimpan</small>
+        <small class="text-muted d-none d-sm-inline" style="font-size: 0.75rem;">Berkas tersimpan</small>
       </div>
     </div>
   </div>
 
   <!-- Total Folders -->
-  <div class="col-12 col-sm-6 col-xl-3">
+  <div class="col-6 col-md-6 col-xl-3">
     <div class="card-custom metric-card h-100">
       <div class="metric-icon" style="background-color: #fef3c7; color: #d97706;">
         <i class="bi bi-folder-fill"></i>
@@ -30,35 +30,35 @@
       <div>
         <div class="metric-title">Total Folder</div>
         <div class="metric-value text-dark">{{ number_format($totalFolders) }}</div>
-        <small class="text-muted" style="font-size: 0.75rem;">Direktori arsip</small>
+        <small class="text-muted d-none d-sm-inline" style="font-size: 0.75rem;">Direktori arsip</small>
       </div>
     </div>
   </div>
 
   <!-- Total Storage Used -->
-  <div class="col-12 col-sm-6 col-xl-3">
+  <div class="col-6 col-md-6 col-xl-3">
     <div class="card-custom metric-card h-100">
       <div class="metric-icon" style="background-color: #f0fdf4; color: #16a34a;">
         <i class="bi bi-hdd-fill"></i>
       </div>
       <div>
-        <div class="metric-title">Kapasitas Terpakai</div>
+        <div class="metric-title">Kapasitas</div>
         <div class="metric-value text-dark" style="font-size: 1.5rem;">{{ $totalSizeFormatted }}</div>
-        <small class="text-muted" style="font-size: 0.75rem;">Storage file publik</small>
+        <small class="text-muted d-none d-sm-inline" style="font-size: 0.75rem;">Storage file publik</small>
       </div>
     </div>
   </div>
 
   <!-- Total Users -->
-  <div class="col-12 col-sm-6 col-xl-3">
+  <div class="col-6 col-md-6 col-xl-3">
     <div class="card-custom metric-card h-100">
       <div class="metric-icon" style="background-color: #f5f3ff; color: #7c3aed;">
         <i class="bi bi-people-fill"></i>
       </div>
       <div>
-        <div class="metric-title">Pengguna Terdaftar</div>
+        <div class="metric-title">Pengguna</div>
         <div class="metric-value text-dark">{{ number_format($totalUsers) }}</div>
-        <small class="text-muted" style="font-size: 0.75rem;">Akun administrator & user</small>
+        <small class="text-muted d-none d-sm-inline" style="font-size: 0.75rem;">Akun terdaftar</small>
       </div>
     </div>
   </div>
@@ -115,7 +115,7 @@
       </div>
 
       <!-- Quick Actions -->
-      <div class="d-flex flex-wrap gap-2 mt-4 pt-3 border-top">
+      <div class="dashboard-quick-actions d-flex flex-wrap gap-2 mt-4 pt-3 border-top">
         <a href="{{ url('/data-File') }}" class="btn btn-teal text-white rounded-pill px-3 py-2 small fw-semibold" style="background-color: #0d9488; border: none;" target="_blank">
           <i class="bi bi-cloud-arrow-up-fill me-1"></i> Buka File Explorer
         </a>
@@ -182,32 +182,32 @@
 </div>
 
 <!-- ShareFile Access Password Settings Card -->
-<div class="card-custom p-4 mb-4" style="border-left: 4px solid #0d9488;">
+<div class="card-custom p-3 p-sm-4 mb-3 mb-md-4" style="border-left: 4px solid #0d9488;">
   <div class="row align-items-center gy-3">
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-xl-6">
       <div class="d-flex align-items-center gap-3">
-        <div class="metric-icon" style="background-color: #ccfbf1; color: #0d9488; width: 48px; height: 48px; font-size: 1.35rem; border-radius: 12px;">
+        <div class="metric-icon flex-shrink-0" style="background-color: #ccfbf1; color: #0d9488; width: 44px; height: 44px; font-size: 1.3rem; border-radius: 12px;">
           <i class="bi bi-shield-lock-fill"></i>
         </div>
         <div>
-          <div class="d-flex align-items-center gap-2">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
             <h3 class="h6 fw-bold mb-0 text-dark">Keamanan & Password Akses Menu Share File</h3>
             @if($sharefilePasswordEnabled)
-              <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-pill small">
+              <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-pill small" style="font-size: 0.72rem;">
                 <i class="bi bi-lock-fill me-1"></i> Proteksi Aktif
               </span>
             @else
-              <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1 rounded-pill small">
+              <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1 rounded-pill small" style="font-size: 0.72rem;">
                 <i class="bi bi-unlock-fill me-1"></i> Proteksi Nonaktif
               </span>
             @endif
           </div>
-          <small class="text-muted">Pengunjung wajib memasukkan password ini untuk mengakses berkas dan folder di menu Share File.</small>
+          <small class="text-muted d-block mt-1">Pengunjung wajib memasukkan password ini untuk mengakses berkas dan folder di menu Share File.</small>
         </div>
       </div>
     </div>
-    <div class="col-12 col-lg-6">
-      <form action="{{ route('admin.settings.sharefile_password') }}" method="POST" class="d-flex flex-wrap align-items-center gap-2 justify-content-lg-end">
+    <div class="col-12 col-xl-6">
+      <form action="{{ route('admin.settings.sharefile_password') }}" method="POST" class="sharefile-pw-form d-flex flex-wrap align-items-center gap-2 justify-content-xl-end">
         @csrf
         <div class="form-check form-switch me-2 mb-0">
           <input class="form-check-input" type="checkbox" role="switch" id="enableProtection" name="sharefile_password_enabled" value="1" {{ $sharefilePasswordEnabled ? 'checked' : '' }}>
@@ -245,10 +245,10 @@
         <thead>
           <tr>
             <th>Nama Berkas / Folder</th>
-            <th>Tipe</th>
-            <th>Pemilik / Uploader</th>
-            <th>Ukuran</th>
-            <th>Tanggal Unggah</th>
+            <th class="d-none d-sm-table-cell">Tipe</th>
+            <th class="d-none d-md-table-cell">Pemilik / Uploader</th>
+            <th class="d-none d-sm-table-cell">Ukuran</th>
+            <th class="d-none d-lg-table-cell">Tanggal Unggah</th>
             <th class="text-end">Aksi</th>
           </tr>
         </thead>
@@ -262,63 +262,69 @@
               <td>
                 <div class="d-flex align-items-center gap-2">
                   @if($isFolder)
-                    <div class="p-2 rounded bg-warning bg-opacity-10 text-warning">
+                    <div class="p-2 rounded bg-warning bg-opacity-10 text-warning flex-shrink-0">
                       <i class="bi bi-folder-fill fs-5"></i>
                     </div>
                   @elseif(in_array($ext, ['pdf']))
-                    <div class="p-2 rounded bg-danger bg-opacity-10 text-danger">
+                    <div class="p-2 rounded bg-danger bg-opacity-10 text-danger flex-shrink-0">
                       <i class="bi bi-file-earmark-pdf-fill fs-5"></i>
                     </div>
                   @elseif(in_array($ext, ['doc', 'docx']))
-                    <div class="p-2 rounded bg-primary bg-opacity-10 text-primary">
+                    <div class="p-2 rounded bg-primary bg-opacity-10 text-primary flex-shrink-0">
                       <i class="bi bi-file-earmark-word-fill fs-5"></i>
                     </div>
                   @elseif(in_array($ext, ['xls', 'xlsx', 'csv']))
-                    <div class="p-2 rounded bg-success bg-opacity-10 text-success">
+                    <div class="p-2 rounded bg-success bg-opacity-10 text-success flex-shrink-0">
                       <i class="bi bi-file-earmark-excel-fill fs-5"></i>
                     </div>
                   @elseif(in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif']))
-                    <div class="p-2 rounded bg-warning bg-opacity-10 text-warning">
+                    <div class="p-2 rounded bg-warning bg-opacity-10 text-warning flex-shrink-0">
                       <i class="bi bi-file-earmark-image-fill fs-5"></i>
                     </div>
                   @elseif(in_array($ext, ['zip', 'rar', '7z']))
-                    <div class="p-2 rounded bg-purple bg-opacity-10" style="color: #7c3aed;">
+                    <div class="p-2 rounded bg-purple bg-opacity-10 flex-shrink-0" style="color: #7c3aed;">
                       <i class="bi bi-file-earmark-zip-fill fs-5"></i>
                     </div>
                   @else
-                    <div class="p-2 rounded bg-secondary bg-opacity-10 text-secondary">
+                    <div class="p-2 rounded bg-secondary bg-opacity-10 text-secondary flex-shrink-0">
                       <i class="bi bi-file-earmark-fill fs-5"></i>
                     </div>
                   @endif
 
-                  <div class="overflow-hidden">
-                    <div class="fw-semibold text-dark text-truncate" style="max-width: 300px;">
+                  <div class="overflow-hidden min-w-0 flex-grow-1">
+                    <div class="fw-semibold text-dark text-truncate" style="max-width: 260px;">
                       {{ $doc->original_name }}
                     </div>
                     @if($doc->parent)
-                      <small class="text-muted d-block" style="font-size: 0.72rem;">
+                      <small class="text-muted d-block text-truncate" style="font-size: 0.72rem;">
                         <i class="bi bi-folder me-1"></i> {{ $doc->parent->original_name }}
                       </small>
                     @endif
+                    <!-- Mobile secondary metadata -->
+                    <div class="d-flex align-items-center gap-1 flex-wrap text-muted small d-sm-none mt-1" style="font-size: 0.7rem;">
+                      <span class="badge bg-light text-dark border py-0 px-1">{{ $isFolder ? 'DIR' : strtoupper($ext ?: 'FILE') }}</span>
+                      <span>&bull; {{ $isFolder ? '-' : \App\Http\Controllers\AdminController::formatBytes($doc->file_size) }}</span>
+                      <span>&bull; {{ $doc->owner_name ?? 'Sistem' }}</span>
+                    </div>
                   </div>
                 </div>
               </td>
-              <td>
+              <td class="d-none d-sm-table-cell">
                 @if($isFolder)
                   <span class="badge badge-soft-warning">Folder</span>
                 @else
                   <span class="badge badge-soft-primary text-uppercase">{{ $ext ?: 'File' }}</span>
                 @endif
               </td>
-              <td>
+              <td class="d-none d-md-table-cell">
                 <span class="text-muted small"><i class="bi bi-person me-1"></i> {{ $doc->owner_name ?? 'Sistem' }}</span>
               </td>
-              <td>
+              <td class="d-none d-sm-table-cell">
                 <span class="small font-monospace">
                   {{ $isFolder ? '-' : \App\Http\Controllers\AdminController::formatBytes($doc->file_size) }}
                 </span>
               </td>
-              <td>
+              <td class="d-none d-lg-table-cell">
                 <span class="text-muted small">{{ $doc->created_at ? $doc->created_at->format('d M Y H:i') : '-' }}</span>
               </td>
               <td class="text-end">

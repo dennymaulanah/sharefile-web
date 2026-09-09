@@ -30,17 +30,22 @@
 
     <!-- Sidebar -->
     <aside class="admin-sidebar" id="adminSidebar">
-      <div class="sidebar-brand">
-        <div class="brand-icon">
-          <i class="bi bi-shield-lock-fill"></i>
-        </div>
-        <div>
-          <div class="d-flex align-items-center gap-2">
-            <h1 class="brand-title">ShareFile</h1>
-            <span class="brand-badge">Admin</span>
+      <div class="sidebar-brand d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-2">
+          <div class="brand-icon">
+            <i class="bi bi-shield-lock-fill"></i>
           </div>
-          <small style="color: #64748b; font-size: 0.72rem;">Control & Monitoring</small>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <h1 class="brand-title">ShareFile</h1>
+              <span class="brand-badge">Admin</span>
+            </div>
+            <small style="color: #64748b; font-size: 0.72rem;">Control & Monitoring</small>
+          </div>
         </div>
+        <button type="button" class="btn btn-sm btn-link text-white-50 p-1 border-0 d-lg-none" onclick="toggleSidebar()" aria-label="Tutup Sidebar">
+          <i class="bi bi-x-lg fs-5"></i>
+        </button>
       </div>
 
       <div class="sidebar-menu">
@@ -111,16 +116,17 @@
             <i class="bi bi-list"></i>
           </button>
           <div>
-            <h2 class="h5 mb-0 fw-bold text-dark">@yield('page-title', 'Dashboard')</h2>
-            <small class="text-muted" style="font-size: 0.75rem;">@yield('page-subtitle', 'Ringkasan & Pengelolaan Dokumen')</small>
+            <h2 class="h5 mb-0 fw-bold text-dark topbar-title">@yield('page-title', 'Dashboard')</h2>
+            <small class="text-muted d-none d-sm-block topbar-subtitle" style="font-size: 0.75rem;">@yield('page-subtitle', 'Ringkasan & Pengelolaan Dokumen')</small>
           </div>
         </div>
 
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2">
           <div class="dropdown">
-            <button class="btn btn-light d-flex align-items-center gap-2 rounded-pill px-3 py-1 border" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-light d-flex align-items-center gap-2 rounded-pill px-2 px-sm-3 py-1 border shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <span class="badge bg-teal rounded-circle p-1" style="background-color: #0d9488; width: 10px; height: 10px; display: inline-block;"></span>
-              <span class="fw-semibold text-dark small">{{ Auth::user()->name }}</span>
+              <span class="fw-semibold text-dark small d-none d-sm-inline">{{ Auth::user()->name }}</span>
+              <span class="fw-semibold text-dark small d-sm-none">{{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}</span>
               <i class="bi bi-chevron-down text-muted small"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2">
@@ -183,7 +189,7 @@
       </main>
 
       <!-- Footer -->
-      <footer class="py-3 px-4 border-top bg-white text-muted small d-flex flex-wrap justify-content-between align-items-center">
+      <footer class="admin-footer py-3 px-3 px-sm-4 border-top bg-white text-muted small d-flex flex-wrap justify-content-between align-items-center gap-2">
         <div>&copy; {{ date('Y') }} <strong>ShareFile Server</strong> - Panel Administrasi Terpusat</div>
         <div>Laravel v{{ app()->version() }} &bull; PHP v{{ PHP_VERSION }}</div>
       </footer>

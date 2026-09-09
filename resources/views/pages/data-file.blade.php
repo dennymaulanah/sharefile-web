@@ -105,10 +105,10 @@
         <div class="glass-card p-3 p-sm-4 p-md-4 p-lg-5">
 
             <!-- Top Header -->
-            <div class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center mb-3 mb-md-4 gap-3 gap-xl-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 mb-md-4 gap-3 w-100">
 
                 <!-- Brand / Title & Stats -->
-                <div>
+                <div class="flex-shrink-0">
                     <div class="d-flex align-items-center">
                         <div class="header-icon bg-white rounded-circle p-2 p-sm-3 shadow-sm me-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 52px; height: 52px; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.15) !important;">
                             <i class="bi bi-cloud-check-fill fs-2 text-gradient"></i>
@@ -130,23 +130,23 @@
                     </div>
                 </div>
 
-                <!-- Quick Action Buttons -->
-                <div class="header-actions d-flex flex-wrap gap-2 align-items-center w-100 w-xl-auto">
+                <!-- Quick Action Buttons (Aligned to the Right) -->
+                <div class="header-actions d-flex flex-wrap gap-2 align-items-center justify-content-start justify-content-md-end ms-md-auto">
                     <!-- Upload File Button -->
-                    <button type="button" class="btn-action-primary shadow-sm flex-grow-1 flex-sm-grow-0 justify-content-center" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    <button type="button" class="btn-action-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#uploadModal">
                         <i class="bi bi-cloud-arrow-up-fill fs-5"></i>
                         <span>Upload File</span>
                     </button>
 
                     <!-- Buat Folder Button -->
-                    <button type="button" class="btn-action-secondary shadow-sm flex-grow-1 flex-sm-grow-0 justify-content-center" data-bs-toggle="modal" data-bs-target="#folderModal">
+                    <button type="button" class="btn-action-secondary shadow-sm" data-bs-toggle="modal" data-bs-target="#folderModal">
                         <i class="bi bi-folder-plus text-warning fs-5"></i>
                         <span>Folder Baru</span>
                     </button>
 
                     <!-- More Options Dropdown -->
-                    <div class="dropdown flex-grow-1 flex-sm-grow-0">
-                        <button class="btn-action-secondary shadow-sm dropdown-toggle w-100 justify-content-center" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="dropdown">
+                        <button class="btn-action-secondary shadow-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-gear-fill text-muted"></i>
                             <span>Lainnya</span>
                         </button>
@@ -174,9 +174,9 @@
                     </div>
 
                     @if(empty($isLocked) && session('sharefile_unlocked'))
-                    <form action="{{ url('/data-File/lock') }}" method="POST" class="d-inline m-0 flex-grow-1 flex-sm-grow-0">
+                    <form action="{{ url('/data-File/lock') }}" method="POST" class="d-inline m-0">
                         @csrf
-                        <button type="submit" class="btn btn-outline-danger rounded-pill px-3 py-2 d-flex align-items-center justify-content-center gap-1 shadow-sm small fw-semibold w-100" title="Kunci Kembali Akses Berkas">
+                        <button type="submit" class="btn btn-outline-danger rounded-pill px-3 py-2 d-flex align-items-center justify-content-center gap-1 shadow-sm small fw-semibold" title="Kunci Kembali Akses Berkas">
                             <i class="bi bi-lock-fill"></i> <span>Kunci Akses</span>
                         </button>
                     </form>
@@ -365,7 +365,7 @@
                                     <div class="file-icon-box {{ $typeClass }} me-2 me-sm-3 flex-shrink-0">
                                         <i class="bi {{ $iconClass }}"></i>
                                     </div>
-                                    <div class="d-flex flex-column overflow-hidden min-w-0 flex-grow-1" style="max-width: 650px;">
+                                    <div class="d-flex flex-column overflow-hidden min-w-0 flex-grow-1 file-title-container">
                                         <div class="d-flex align-items-center gap-2 mb-1">
                                             @if($doc->is_folder)
                                                 <a href="{{ url('data-File?folder='.$doc->id) }}" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Buka Folder {{ $doc->original_name }}">{{ $doc->original_name }}</a>
@@ -418,36 +418,82 @@
                                     {{ $doc->is_folder ? 'Folder' : $formattedSize }}
                                 </span>
                             </td>
-                            <td class="text-end text-nowrap">
-                                <div class="d-flex justify-content-end gap-1">
-                                    @if($doc->is_folder)
-                                        <a href="{{ url('data-File?folder='.$doc->id) }}" class="action-btn-modern btn-hover-info" title="Buka Folder"><i class="bi bi-folder2-open"></i></a>
-                                        <a href="{{ url('data-File/folder-download/'.$doc->id) }}" class="action-btn-modern btn-hover-success d-none d-sm-inline-flex" title="Download Folder (ZIP)"><i class="bi bi-file-earmark-zip-fill"></i></a>
-                                    @else
-                                        @if($isWord)
-                                            <!-- Buka di Aplikasi Word Desktop (WebDAV - Auto-save ke Server) -->
-                                            <a href="{{ $desktopOfficeUrl }}" class="action-btn-modern btn-hover-primary" title="Edit di Microsoft Word Desktop (Auto-Save ke Server)"><i class="bi bi-file-earmark-word-fill text-primary"></i></a>
-                                        @elseif($isExcel)
-                                            <!-- Buka di Aplikasi Excel Desktop (WebDAV - Auto-save ke Server) -->
-                                            <a href="{{ $desktopOfficeUrl }}" class="action-btn-modern btn-hover-success" title="Edit di Microsoft Excel Desktop (Auto-Save ke Server)"><i class="bi bi-file-earmark-excel-fill text-success"></i></a>
-                                        @elseif(Str::contains($doc->mime_type, 'pdf') || Str::contains($doc->mime_type, 'image') || Str::contains($doc->mime_type, 'text'))
-                                            <a href="{{ $fileStorageUrl }}" target="_blank" class="action-btn-modern btn-hover-info" title="Lihat di Browser"><i class="bi bi-box-arrow-up-right"></i></a>
+                            <td class="text-end text-nowrap pe-3 pe-md-4">
+                                <div class="dropdown d-inline-block">
+                                    <button class="action-btn-modern rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Menu Aksi">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end glass-dropdown border-0 shadow-lg py-2">
+                                        @if($doc->is_folder)
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url('data-File?folder='.$doc->id) }}">
+                                                    <i class="bi bi-folder2-open text-primary fs-6"></i>
+                                                    <span>Buka Folder</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url('data-File/folder-download/'.$doc->id) }}">
+                                                    <i class="bi bi-file-earmark-zip-fill text-success fs-6"></i>
+                                                    <span>Download Folder (ZIP)</span>
+                                                </a>
+                                            </li>
+                                        @else
+                                            @if($isWord)
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ $desktopOfficeUrl }}">
+                                                        <i class="bi bi-file-earmark-word-fill text-primary fs-6"></i>
+                                                        <span>Edit di Microsoft Word</span>
+                                                    </a>
+                                                </li>
+                                            @elseif($isExcel)
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ $desktopOfficeUrl }}">
+                                                        <i class="bi bi-file-earmark-excel-fill text-success fs-6"></i>
+                                                        <span>Edit di Microsoft Excel</span>
+                                                    </a>
+                                                </li>
+                                            @elseif(Str::contains($doc->mime_type, 'pdf') || Str::contains($doc->mime_type, 'image') || Str::contains($doc->mime_type, 'text'))
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ $fileStorageUrl }}" target="_blank">
+                                                        <i class="bi bi-box-arrow-up-right text-info fs-6"></i>
+                                                        <span>Buka di Browser</span>
+                                                    </a>
+                                                </li>
+                                            @endif
+
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url('data-File/download/'.$doc->id) }}">
+                                                    <i class="bi bi-cloud-arrow-down-fill text-secondary fs-6"></i>
+                                                    <span>Download Berkas</span>
+                                                </a>
+                                            </li>
                                         @endif
 
-                                        <!-- Download Langsung -->
-                                        <a href="{{ url('data-File/download/'.$doc->id) }}" class="action-btn-modern btn-hover-secondary" title="Download File"><i class="bi bi-cloud-arrow-down-fill"></i></a>
-                                    @endif
+                                        <li>
+                                            <button type="button" class="dropdown-item d-flex align-items-center gap-2 py-2" onclick="copySmbPath('{{ addslashes($smbPath) }}')">
+                                                <i class="bi bi-link-45deg text-success fs-6"></i>
+                                                <span>Salin Link Drive (SMB)</span>
+                                            </button>
+                                        </li>
 
-                                    <button type="button" class="action-btn-modern btn-hover-primary" title="Ganti Nama" data-bs-toggle="modal" data-bs-target="#renameModal" data-doc-id="{{ $doc->id }}" data-doc-name="{{ $doc->original_name }}">
-                                        <i class="bi bi-input-cursor-text"></i>
-                                    </button>
+                                        <li>
+                                            <button type="button" class="dropdown-item d-flex align-items-center gap-2 py-2" data-bs-toggle="modal" data-bs-target="#renameModal" data-doc-id="{{ $doc->id }}" data-doc-name="{{ $doc->original_name }}">
+                                                <i class="bi bi-input-cursor-text text-warning fs-6"></i>
+                                                <span>Ganti Nama</span>
+                                            </button>
+                                        </li>
 
-                                    <button type="button" 
-                                        class="action-btn-modern btn-hover-danger" 
-                                        title="Pindahkan ke Tempat Sampah"
-                                        onclick="openDeleteConfirm('{{ url('data-File/'.$doc->id) }}', '{{ addslashes($doc->original_name) }}', {{ $doc->is_folder ? 'true' : 'false' }})">
-                                        <i class="bi bi-trash3-fill"></i>
-                                    </button>
+                                        <li><hr class="dropdown-divider my-1 opacity-10"></li>
+
+                                        <li>
+                                            <button type="button" 
+                                                class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger" 
+                                                onclick="openDeleteConfirm('{{ url('data-File/'.$doc->id) }}', '{{ addslashes($doc->original_name) }}', {{ $doc->is_folder ? 'true' : 'false' }})">
+                                                <i class="bi bi-trash3-fill fs-6"></i>
+                                                <span>Pindahkan ke Sampah</span>
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
                             </td>
                         </tr>
@@ -530,6 +576,10 @@
                     const currentTbody = document.getElementById('document-table-body');
 
                     if (newTbody && currentTbody) {
+                        // Jangan update DOM jika dropdown aksi sedang terbuka
+                        if (document.querySelector('.dropdown-menu.show')) {
+                            return;
+                        }
                         // Hanya update DOM jika ada perubahan HTML (untuk menghemat resource)
                         if (newTbody.innerHTML !== currentTbody.innerHTML) {
                             currentTbody.innerHTML = newTbody.innerHTML;
@@ -1109,6 +1159,49 @@ function openDeleteConfirm(actionUrl, itemName, isFolder) {
         const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.show();
     }
+}
+
+function copySmbPath(path) {
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(path).then(showCopySuccess).catch(() => fallbackCopy(path));
+    } else {
+        fallbackCopy(path);
+    }
+}
+
+function fallbackCopy(path) {
+    const ta = document.createElement('textarea');
+    ta.value = path;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+        document.execCommand('copy');
+        showCopySuccess();
+    } catch (err) {
+        alert('Gagal menyalin link.');
+    }
+    document.body.removeChild(ta);
+}
+
+function showCopySuccess() {
+    const existing = document.getElementById('copySuccessToast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.id = 'copySuccessToast';
+    toast.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-4 px-4 py-2 bg-dark text-white rounded-pill shadow small fw-medium d-flex align-items-center gap-2';
+    toast.style.zIndex = '9999';
+    toast.style.animation = 'fadeIn 0.2s ease';
+    toast.innerHTML = '<i class="bi bi-check-circle-fill text-success"></i> Link Drive berhasil disalin ke clipboard!';
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, 2500);
 }
 
 function toggleUnlockPassword() {

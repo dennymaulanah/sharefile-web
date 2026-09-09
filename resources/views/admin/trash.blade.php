@@ -73,7 +73,7 @@
 </div>
 
 <!-- Trashed Items Table Card -->
-<div class="card-custom p-4">
+<div class="card-custom p-3 p-sm-4">
   <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
     <div>
       <h3 class="h6 fw-bold mb-0 text-dark"><i class="bi bi-trash3-fill text-danger me-2"></i> Berkas di Tempat Sampah</h3>
@@ -87,10 +87,10 @@
         <thead>
           <tr>
             <th>Nama Berkas / Folder</th>
-            <th>Tipe</th>
-            <th>Lokasi Asal</th>
-            <th>Ukuran</th>
-            <th>Waktu Dihapus</th>
+            <th class="d-none d-sm-table-cell">Tipe</th>
+            <th class="d-none d-lg-table-cell">Lokasi Asal</th>
+            <th class="d-none d-sm-table-cell">Ukuran</th>
+            <th class="d-none d-md-table-cell">Waktu Dihapus</th>
             <th class="text-end">Tindakan Admin</th>
           </tr>
         </thead>
@@ -104,53 +104,59 @@
               <td>
                 <div class="d-flex align-items-center gap-2">
                   @if($isFolder)
-                    <div class="p-2 rounded bg-warning bg-opacity-10 text-warning">
+                    <div class="p-2 rounded bg-warning bg-opacity-10 text-warning flex-shrink-0">
                       <i class="bi bi-folder-fill fs-5"></i>
                     </div>
                   @elseif(in_array($ext, ['pdf']))
-                    <div class="p-2 rounded bg-danger bg-opacity-10 text-danger">
+                    <div class="p-2 rounded bg-danger bg-opacity-10 text-danger flex-shrink-0">
                       <i class="bi bi-file-earmark-pdf-fill fs-5"></i>
                     </div>
                   @elseif(in_array($ext, ['doc', 'docx']))
-                    <div class="p-2 rounded bg-primary bg-opacity-10 text-primary">
+                    <div class="p-2 rounded bg-primary bg-opacity-10 text-primary flex-shrink-0">
                       <i class="bi bi-file-earmark-word-fill fs-5"></i>
                     </div>
                   @elseif(in_array($ext, ['xls', 'xlsx', 'csv']))
-                    <div class="p-2 rounded bg-success bg-opacity-10 text-success">
+                    <div class="p-2 rounded bg-success bg-opacity-10 text-success flex-shrink-0">
                       <i class="bi bi-file-earmark-excel-fill fs-5"></i>
                     </div>
                   @elseif(in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif']))
-                    <div class="p-2 rounded bg-warning bg-opacity-10 text-warning">
+                    <div class="p-2 rounded bg-warning bg-opacity-10 text-warning flex-shrink-0">
                       <i class="bi bi-file-earmark-image-fill fs-5"></i>
                     </div>
                   @elseif(in_array($ext, ['zip', 'rar', '7z']))
-                    <div class="p-2 rounded bg-purple bg-opacity-10" style="color: #7c3aed;">
+                    <div class="p-2 rounded bg-purple bg-opacity-10 flex-shrink-0" style="color: #7c3aed;">
                       <i class="bi bi-file-earmark-zip-fill fs-5"></i>
                     </div>
                   @else
-                    <div class="p-2 rounded bg-secondary bg-opacity-10 text-secondary">
+                    <div class="p-2 rounded bg-secondary bg-opacity-10 text-secondary flex-shrink-0">
                       <i class="bi bi-file-earmark-fill fs-5"></i>
                     </div>
                   @endif
 
-                  <div class="overflow-hidden" style="max-width: 280px;">
-                    <div class="fw-semibold text-dark text-truncate" title="{{ $doc->original_name }}">
+                  <div class="overflow-hidden min-w-0 flex-grow-1">
+                    <div class="fw-semibold text-dark text-truncate" style="max-width: 260px;" title="{{ $doc->original_name }}">
                       {{ $doc->original_name }}
                     </div>
                     <small class="text-muted d-block text-truncate" style="font-size: 0.72rem;">
                       Pengunggah: {{ $doc->owner_name ?? 'Sistem' }}
                     </small>
+                    <!-- Mobile secondary metadata -->
+                    <div class="d-flex align-items-center gap-1 flex-wrap text-muted small d-sm-none mt-1" style="font-size: 0.7rem;">
+                      <span class="badge bg-light text-dark border py-0 px-1">{{ $isFolder ? 'DIR' : strtoupper($ext ?: 'FILE') }}</span>
+                      <span>&bull; {{ $isFolder ? '-' : \App\Http\Controllers\AdminController::formatBytes($doc->file_size) }}</span>
+                      <span>&bull; {{ $doc->deleted_at ? $doc->deleted_at->diffForHumans() : '-' }}</span>
+                    </div>
                   </div>
                 </div>
               </td>
-              <td>
+              <td class="d-none d-sm-table-cell">
                 @if($isFolder)
                   <span class="badge badge-soft-warning">Folder</span>
                 @else
                   <span class="badge badge-soft-primary text-uppercase">{{ $ext ?: 'File' }}</span>
                 @endif
               </td>
-              <td>
+              <td class="d-none d-lg-table-cell">
                 <span class="text-muted small">
                   @if($doc->parent)
                     <i class="bi bi-folder2 me-1 text-warning"></i> {{ $doc->parent->original_name }}
@@ -159,12 +165,12 @@
                   @endif
                 </span>
               </td>
-              <td>
+              <td class="d-none d-sm-table-cell">
                 <span class="small font-monospace">
                   {{ $isFolder ? '-' : \App\Http\Controllers\AdminController::formatBytes($doc->file_size) }}
                 </span>
               </td>
-              <td>
+              <td class="d-none d-md-table-cell">
                 <span class="small text-danger fw-semibold d-block">
                   <i class="bi bi-clock-history me-1"></i> {{ $doc->deleted_at ? $doc->deleted_at->diffForHumans() : '-' }}
                 </span>

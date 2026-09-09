@@ -221,22 +221,29 @@ textarea,
     transform: scale(1.02);
 }
 
-/* Action Buttons in Table */
+/* Action Buttons in Table (3-Dots Menu) */
 .action-btn-modern {
     width: 36px;
     height: 36px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.8);
-    color: #6b7280;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: #64748b;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     transition: all 0.2s ease;
     text-decoration: none;
+    cursor: pointer;
 }
 
-.action-btn-modern:hover {
+.action-btn-modern:hover,
+.action-btn-modern:focus,
+.action-btn-modern[aria-expanded="true"] {
+    background: #ffffff;
+    color: #4F46E5;
+    border-color: rgba(79, 70, 229, 0.35);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
     transform: translateY(-2px);
 }
 
@@ -733,6 +740,7 @@ textarea,
 .unified-table-card .table-responsive {
     margin: 0;
     padding: 0;
+    min-height: 280px;
 }
 
 .unified-table-card .modern-table {
@@ -929,9 +937,12 @@ textarea,
     }
 
     .action-btn-modern {
-        width: 32px;
-        height: 32px;
-        font-size: 0.8rem;
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        font-size: 0.9rem;
+        border-radius: 10px;
     }
 
     .lock-card {
@@ -944,6 +955,124 @@ textarea,
         padding: 20px 14px;
     }
 }
+
+/* ==========================================================================
+   Base & Responsive Layout Refinements (ShareFile Header & Actions)
+   ========================================================================== */
+
+/* File / Folder Name Container Width (Desktop) */
+.file-title-container {
+    max-width: 325px;
+    width: 100%;
+}
+
+/* Header Action Buttons Aligned to the Right (Desktop) */
+.header-actions {
+    margin-left: auto !important;
+}
+
+/* Ensure Action Column in Table takes minimum compact space */
+.unified-table-card .modern-table th.text-end,
+.unified-table-card .modern-table td.text-end {
+    width: 1%;
+    white-space: nowrap;
+}
+
+/* Responsive Overrides for Mobile & Tablet (<= 767.98px) */
+@media (max-width: 767.98px) {
+    /* Header Quick Action Buttons: Symmetrical 2x2 Grid */
+    .header-actions {
+        margin-left: 0 !important;
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    .header-actions > .btn-action-primary,
+    .header-actions > .btn-action-secondary,
+    .header-actions > .dropdown,
+    .header-actions > form {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .header-actions .btn-action-primary,
+    .header-actions .btn-action-secondary,
+    .header-actions .dropdown > button,
+    .header-actions form button {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 42px !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: 9px 10px !important;
+        font-size: 0.82rem !important;
+        border-radius: 12px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* If odd number of buttons (e.g. 3 buttons without Kunci Akses), last button spans across 2 columns */
+    .header-actions > :last-child:nth-child(odd) {
+        grid-column: span 2;
+    }
+
+    /* File title responsive max-width on mobile */
+    .file-title-container {
+        max-width: calc(100vw - 160px);
+    }
+
+    /* 3-Dots Action Dropdown Menu on Mobile */
+    .glass-dropdown {
+        min-width: 200px !important;
+        max-width: calc(100vw - 32px) !important;
+        border-radius: 14px !important;
+        padding: 8px !important;
+    }
+
+    .glass-dropdown .dropdown-item {
+        padding: 10px 14px !important;
+        font-size: 0.85rem !important;
+        border-radius: 10px !important;
+    }
+
+    /* Table Filter Header on Mobile */
+    .table-filter-header {
+        padding: 12px !important;
+    }
+
+    .table-filter-header .form-control,
+    .table-filter-header .form-select,
+    .table-filter-header .btn {
+        min-height: 40px !important;
+        font-size: 0.85rem !important;
+    }
+}
+
+/* Extra Small Phones (<= 575.98px) */
+@media (max-width: 575.98px) {
+    .glass-card {
+        padding: 16px 12px !important;
+    }
+
+    .header-actions .btn-action-primary,
+    .header-actions .btn-action-secondary,
+    .header-actions .dropdown > button,
+    .header-actions form button {
+        font-size: 0.78rem !important;
+        padding: 8px 6px !important;
+        min-height: 40px !important;
+    }
+
+    .file-title-container {
+        max-width: calc(100vw - 125px) !important;
+    }
+}
+
+
 
 
 
