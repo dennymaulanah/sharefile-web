@@ -346,11 +346,12 @@
                                         <i class="bi bi-input-cursor-text"></i>
                                     </button>
 
-                                    <form action="{{ url('data-File/'.$doc->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Pindahkan {{ $doc->is_folder ? 'folder ini dan seluruh isinya' : 'berkas ini' }} ke Tempat Sampah (Recycle Bin)?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="action-btn-modern btn-hover-danger" title="Pindahkan ke Tempat Sampah"><i class="bi bi-trash3-fill"></i></button>
-                                    </form>
+                                    <button type="button" 
+                                        class="action-btn-modern btn-hover-danger" 
+                                        title="Pindahkan ke Tempat Sampah"
+                                        onclick="openDeleteConfirm('{{ url('data-File/'.$doc->id) }}', '{{ addslashes($doc->original_name) }}', {{ $doc->is_folder ? 'true' : 'false' }})">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -943,7 +944,71 @@
     </div>
 </div>
 
+<!-- Modern Centered Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
+        <div class="modal-content modal-glass border-0 rounded-4 shadow-lg overflow-hidden">
+            <div class="modal-body text-center p-4 pt-4 pb-3">
+                <div class="delete-icon-pulse mb-3 mx-auto">
+                    <i class="bi bi-trash3-fill"></i>
+                </div>
+                <h5 class="fw-bold text-dark mb-2" id="deleteConfirmTitle">Pindahkan ke Tempat Sampah?</h5>
+                <p class="text-muted small mb-3">
+                    Apakah Anda yakin ingin memindahkan <span id="deleteConfirmItemType" class="text-dark fw-medium">item ini</span> ke Tempat Sampah:
+                </p>
+                <div class="delete-item-pill mb-3 text-start shadow-sm mx-auto">
+                    <i class="bi bi-file-earmark-text text-danger fs-5 flex-shrink-0" id="deleteConfirmIcon"></i>
+                    <span class="fw-semibold text-dark text-truncate small" id="deleteConfirmItemName" style="max-width: 270px; display: inline-block; vertical-align: middle;"></span>
+                </div>
+                <div class="alert alert-light border py-2 px-3 rounded-3 small text-muted d-flex align-items-center justify-content-center gap-2 mb-0" style="font-size: 0.78rem; background-color: #f8fafc;">
+                    <i class="bi bi-info-circle-fill text-primary flex-shrink-0"></i>
+                    <span class="text-start">Item dapat dipulihkan kembali oleh Administrator melalui menu Recycle Bin jika diperlukan.</span>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pb-4 px-4 pt-1 d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-light rounded-pill px-4 py-2 text-secondary fw-medium shadow-sm" data-bs-dismiss="modal">
+                    Batal
+                </button>
+                <form id="deleteConfirmForm" action="" method="POST" class="m-0">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none;">
+                        <i class="bi bi-trash3-fill"></i>
+                        <span>Ya, Pindahkan</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+function openDeleteConfirm(actionUrl, itemName, isFolder) {
+    const form = document.getElementById('deleteConfirmForm');
+    const nameEl = document.getElementById('deleteConfirmItemName');
+    const typeEl = document.getElementById('deleteConfirmItemType');
+    const titleEl = document.getElementById('deleteConfirmTitle');
+    const iconEl = document.getElementById('deleteConfirmIcon');
+
+    if (form) form.action = actionUrl;
+    if (nameEl) nameEl.textContent = itemName;
+    if (typeEl) typeEl.textContent = isFolder ? 'folder beserta seluruh isinya' : 'berkas ini';
+    if (titleEl) titleEl.textContent = isFolder ? 'Pindahkan Folder ke Sampah?' : 'Pindahkan Berkas ke Sampah?';
+    if (iconEl) {
+        if (isFolder) {
+            iconEl.className = 'bi bi-folder-fill text-warning fs-5 flex-shrink-0';
+        } else {
+            iconEl.className = 'bi bi-file-earmark-text text-danger fs-5 flex-shrink-0';
+        }
+    }
+
+    const modalEl = document.getElementById('deleteConfirmModal');
+    if (modalEl) {
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+    }
+}
+
 function toggleUnlockPassword() {
     const input = document.getElementById('sharefileUnlockInput');
     const icon = document.getElementById('unlockEyeIcon');
