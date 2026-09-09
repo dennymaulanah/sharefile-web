@@ -8,7 +8,7 @@
   <link href="{{ asset('assets/css/data-file.css') }}" rel="stylesheet">
 @endpush
 
-<section id="data-File" class="data-File-bg pt-5">
+<section id="data-File" class="data-File-bg py-2 py-sm-3 py-md-4">
     @if(!empty($isLocked))
     <!-- Lock Screen Modal Overlay -->
     <div class="sharefile-lock-overlay">
@@ -65,7 +65,7 @@
     </div>
     @endif
 
-    <div class="container-fluid px-3 px-sm-4 px-md-5 py-4 {{ !empty($isLocked) ? 'sharefile-content-locked' : '' }}" style="max-width: 1750px;" data-aos="fade-up" data-aos-duration="800">
+    <div class="container-fluid px-2 px-sm-3 px-md-4 py-2 py-md-3 {{ !empty($isLocked) ? 'sharefile-content-locked' : '' }}" style="max-width: 1750px;" data-aos="fade-up" data-aos-duration="800">
 
         <!-- Alerts -->
         @if(session('success'))
@@ -102,20 +102,20 @@
         @endif
 
         <!-- Main App Container -->
-        <div class="glass-card p-4 p-md-5">
+        <div class="glass-card p-3 p-sm-4 p-md-4 p-lg-5">
 
             <!-- Top Header -->
-            <div class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center mb-4 gap-4">
+            <div class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center mb-3 mb-md-4 gap-3 gap-xl-4">
 
                 <!-- Brand / Title & Stats -->
                 <div>
                     <div class="d-flex align-items-center">
-                        <div class="bg-white rounded-circle p-3 shadow-sm me-3 d-flex align-items-center justify-content-center" style="width: 58px; height: 58px; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.15) !important;">
+                        <div class="header-icon bg-white rounded-circle p-2 p-sm-3 shadow-sm me-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 52px; height: 52px; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.15) !important;">
                             <i class="bi bi-cloud-check-fill fs-2 text-gradient"></i>
                         </div>
                         <div>
                             <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
-                                <h3 class="fw-bold mb-0 text-dark">Share File</h3>
+                                <h3 class="fw-bold mb-0 text-dark header-title">Share File</h3>
                                 <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-1 small" style="font-size: 0.72rem;">
                                     <i class="bi bi-files me-1"></i> {{ $documents->total() }} Item
                                 </span>
@@ -125,28 +125,28 @@
                                 </span>
                                 @endif
                             </div>
-                            <p class="text-muted mb-0 small">Kelola, unggah, dan pantau berkas Anda secara terpusat di server</p>
+                            <p class="text-muted mb-0 small header-subtitle">Kelola, unggah, dan pantau berkas Anda secara terpusat di server</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Quick Action Buttons -->
-                <div class="d-flex flex-wrap gap-2 align-items-center">
+                <div class="header-actions d-flex flex-wrap gap-2 align-items-center w-100 w-xl-auto">
                     <!-- Upload File Button -->
-                    <button type="button" class="btn-action-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    <button type="button" class="btn-action-primary shadow-sm flex-grow-1 flex-sm-grow-0 justify-content-center" data-bs-toggle="modal" data-bs-target="#uploadModal">
                         <i class="bi bi-cloud-arrow-up-fill fs-5"></i>
                         <span>Upload File</span>
                     </button>
 
                     <!-- Buat Folder Button -->
-                    <button type="button" class="btn-action-secondary shadow-sm" data-bs-toggle="modal" data-bs-target="#folderModal">
+                    <button type="button" class="btn-action-secondary shadow-sm flex-grow-1 flex-sm-grow-0 justify-content-center" data-bs-toggle="modal" data-bs-target="#folderModal">
                         <i class="bi bi-folder-plus text-warning fs-5"></i>
                         <span>Folder Baru</span>
                     </button>
 
                     <!-- More Options Dropdown -->
-                    <div class="dropdown">
-                        <button class="btn-action-secondary shadow-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="dropdown flex-grow-1 flex-sm-grow-0">
+                        <button class="btn-action-secondary shadow-sm dropdown-toggle w-100 justify-content-center" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-gear-fill text-muted"></i>
                             <span>Lainnya</span>
                         </button>
@@ -174,10 +174,10 @@
                     </div>
 
                     @if(empty($isLocked) && session('sharefile_unlocked'))
-                    <form action="{{ url('/data-File/lock') }}" method="POST" class="d-inline m-0">
+                    <form action="{{ url('/data-File/lock') }}" method="POST" class="d-inline m-0 flex-grow-1 flex-sm-grow-0">
                         @csrf
-                        <button type="submit" class="btn btn-outline-danger rounded-pill px-3 py-2 d-flex align-items-center gap-1 shadow-sm small fw-semibold" title="Kunci Kembali Akses Berkas">
-                            <i class="bi bi-lock-fill"></i> <span class="d-none d-sm-inline">Kunci Akses</span>
+                        <button type="submit" class="btn btn-outline-danger rounded-pill px-3 py-2 d-flex align-items-center justify-content-center gap-1 shadow-sm small fw-semibold w-100" title="Kunci Kembali Akses Berkas">
+                            <i class="bi bi-lock-fill"></i> <span>Kunci Akses</span>
                         </button>
                     </form>
                     @endif
@@ -185,9 +185,9 @@
             </div>
 
             <!-- Breadcrumb Navigation Bar -->
-            <div class="breadcrumb-bar d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-                <nav aria-label="breadcrumb">
-                    <ul class="breadcrumb-modern">
+            <div class="breadcrumb-bar d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 mb-3 mb-md-4">
+                <nav aria-label="breadcrumb" class="overflow-x-auto w-100 py-1" style="scrollbar-width: thin;">
+                    <ul class="breadcrumb-modern flex-nowrap">
                         <li>
                             <a href="{{ url('/data-File') }}" class="breadcrumb-item-link {{ !$currentFolder ? 'fw-bold text-primary' : '' }}">
                                 <i class="bi bi-house-door-fill text-primary"></i>
@@ -207,12 +207,12 @@
                                 <li class="breadcrumb-separator"><i class="bi bi-chevron-right"></i></li>
                                 <li>
                                     @if($loop->last)
-                                        <span class="breadcrumb-item-link fw-bold text-dark" style="background: rgba(0,0,0,0.05);">
+                                        <span class="breadcrumb-item-link fw-bold text-dark text-nowrap" style="background: rgba(0,0,0,0.05);">
                                             <i class="bi bi-folder2-open text-warning"></i>
                                             <span>{{ $crumb->original_name }}</span>
                                         </span>
                                     @else
-                                        <a href="{{ url('data-File?folder='.$crumb->id) }}" class="breadcrumb-item-link">
+                                        <a href="{{ url('data-File?folder='.$crumb->id) }}" class="breadcrumb-item-link text-nowrap">
                                             <i class="bi bi-folder text-muted"></i>
                                             <span>{{ $crumb->original_name }}</span>
                                         </a>
@@ -224,78 +224,80 @@
                 </nav>
 
                 @if($currentFolder)
-                <a href="{{ $currentFolder->parent_id ? url('data-File?folder='.$currentFolder->parent_id) : url('data-File') }}" class="btn btn-sm btn-light border rounded-pill px-3 py-1 text-secondary hover-primary d-inline-flex align-items-center gap-1 shadow-sm">
+                <a href="{{ $currentFolder->parent_id ? url('data-File?folder='.$currentFolder->parent_id) : url('data-File') }}" class="btn btn-sm btn-light border rounded-pill px-3 py-1 text-secondary hover-primary d-inline-flex align-items-center justify-content-center gap-1 shadow-sm text-nowrap flex-shrink-0 align-self-start align-self-sm-auto">
                     <i class="bi bi-arrow-left"></i> Naik Satu Level
                 </a>
                 @endif
             </div>
 
-            <!-- Filter & Search Bar -->
-            <div class="filter-card p-3 mb-4 rounded-4 shadow-sm" style="background: rgba(255, 255, 255, 0.78); border: 1px solid rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px);">
-                <form action="{{ url('/data-File') }}" method="GET" class="row g-2 align-items-center">
-                    @if(request('folder'))
-                    <input type="hidden" name="folder" value="{{ request('folder') }}">
-                    @endif
-
-                    <!-- Search Input -->
-                    <div class="col-12 col-md-5">
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 text-muted rounded-start-pill ps-3">
-                                <i class="bi bi-search"></i>
-                            </span>
-                            <input 
-                                type="text" 
-                                name="q" 
-                                class="form-control border-start-0 rounded-end-pill bg-white shadow-none" 
-                                placeholder="Cari nama berkas, folder, atau pengunggah..." 
-                                value="{{ request('q') }}">
-                        </div>
-                    </div>
-
-                    <!-- Category Filter -->
-                    <div class="col-12 col-sm-6 col-md-3">
-                        <select name="type" class="form-select rounded-pill bg-white shadow-none" onchange="this.form.submit()">
-                            <option value="" {{ !request('type') ? 'selected' : '' }}>Semua Tipe File</option>
-                            <option value="folder" {{ request('type') == 'folder' ? 'selected' : '' }}>Folder Direktori</option>
-                            <option value="document" {{ request('type') == 'document' ? 'selected' : '' }}>Dokumen (PDF / Word / Teks)</option>
-                            <option value="spreadsheet" {{ request('type') == 'spreadsheet' ? 'selected' : '' }}>Lembar Kerja (Excel / CSV)</option>
-                            <option value="image" {{ request('type') == 'image' ? 'selected' : '' }}>Gambar (PNG / JPG / WEBP)</option>
-                            <option value="archive" {{ request('type') == 'archive' ? 'selected' : '' }}>Arsip (ZIP / RAR)</option>
-                        </select>
-                    </div>
-
-                    <!-- Sort Filter -->
-                    <div class="col-12 col-sm-6 col-md-2">
-                        <select name="sort" class="form-select rounded-pill bg-white shadow-none" onchange="this.form.submit()">
-                            <option value="created_at" {{ request('sort', 'created_at') == 'created_at' ? 'selected' : '' }}>Terbaru</option>
-                            <option value="original_name" {{ request('sort') == 'original_name' ? 'selected' : '' }}>Nama (A-Z)</option>
-                            <option value="file_size" {{ request('sort') == 'file_size' ? 'selected' : '' }}>Ukuran Terbesar</option>
-                        </select>
-                    </div>
-
-                    <!-- Submit & Reset -->
-                    <div class="col-12 col-md-2 d-flex gap-2">
-                        <button type="submit" class="btn btn-primary rounded-pill w-100 fw-semibold shadow-sm" style="background: var(--primary-gradient); border: none;">
-                            <i class="bi bi-funnel-fill me-1"></i> Filter
-                        </button>
-                        @if(request()->hasAny(['q', 'type', 'sort']))
-                            <a href="{{ url('/data-File') }}{{ request('folder') ? '?folder='.request('folder') : '' }}" class="btn btn-light bg-white border rounded-pill shadow-sm" title="Reset Filter">
-                                <i class="bi bi-arrow-counterclockwise"></i>
-                            </a>
+            <!-- Unified Card: Filter Bar + Table Section -->
+            <div class="unified-table-card rounded-4 shadow-sm overflow-hidden mb-4">
+                <!-- Filter & Search Bar Header -->
+                <div class="table-filter-header p-3 p-md-4">
+                    <form action="{{ url('/data-File') }}" method="GET" class="row g-2 align-items-center">
+                        @if(request('folder'))
+                        <input type="hidden" name="folder" value="{{ request('folder') }}">
                         @endif
-                    </div>
-                </form>
-            </div>
 
-            <!-- Table Section -->
-            <div class="table-responsive px-1 pb-3">
+                        <!-- Search Input -->
+                        <div class="col-12 col-lg-5">
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 text-muted rounded-start-pill ps-3">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input 
+                                    type="text" 
+                                    name="q" 
+                                    class="form-control border-start-0 rounded-end-pill bg-white shadow-none" 
+                                    placeholder="Cari nama berkas, folder, atau pengunggah..." 
+                                    value="{{ request('q') }}">
+                            </div>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="col-6 col-sm-6 col-lg-3">
+                            <select name="type" class="form-select rounded-pill bg-white shadow-none text-truncate" onchange="this.form.submit()">
+                                <option value="" {{ !request('type') ? 'selected' : '' }}>Semua Tipe</option>
+                                <option value="folder" {{ request('type') == 'folder' ? 'selected' : '' }}>Folder Direktori</option>
+                                <option value="document" {{ request('type') == 'document' ? 'selected' : '' }}>Dokumen (PDF/Word)</option>
+                                <option value="spreadsheet" {{ request('type') == 'spreadsheet' ? 'selected' : '' }}>Excel / CSV</option>
+                                <option value="image" {{ request('type') == 'image' ? 'selected' : '' }}>Gambar</option>
+                                <option value="archive" {{ request('type') == 'archive' ? 'selected' : '' }}>Arsip (ZIP/RAR)</option>
+                            </select>
+                        </div>
+
+                        <!-- Sort Filter -->
+                        <div class="col-6 col-sm-6 col-lg-2">
+                            <select name="sort" class="form-select rounded-pill bg-white shadow-none text-truncate" onchange="this.form.submit()">
+                                <option value="created_at" {{ request('sort', 'created_at') == 'created_at' ? 'selected' : '' }}>Terbaru</option>
+                                <option value="original_name" {{ request('sort') == 'original_name' ? 'selected' : '' }}>Nama (A-Z)</option>
+                                <option value="file_size" {{ request('sort') == 'file_size' ? 'selected' : '' }}>Ukuran</option>
+                            </select>
+                        </div>
+
+                        <!-- Submit & Reset -->
+                        <div class="col-12 col-lg-2 d-flex gap-2">
+                            <button type="submit" class="btn btn-primary rounded-pill flex-grow-1 fw-semibold shadow-sm" style="background: var(--primary-gradient); border: none;">
+                                <i class="bi bi-funnel-fill me-1"></i> Filter
+                            </button>
+                            @if(request()->hasAny(['q', 'type', 'sort']))
+                                <a href="{{ url('/data-File') }}{{ request('folder') ? '?folder='.request('folder') : '' }}" class="btn btn-light bg-white border rounded-pill shadow-sm px-3" title="Reset Filter">
+                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                </a>
+                            @endif
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Table Section -->
+                <div class="table-responsive">
                 <table class="table modern-table w-100">
                     <thead>
                         <tr>
-                            <th scope="col" style="min-width: 280px;"><i class="bi bi-file-earmark-text me-1"></i> Nama Berkas / Folder</th>
-                            <th scope="col"><i class="bi bi-person me-1"></i> Pengunggah</th>
-                            <th scope="col"><i class="bi bi-calendar3 me-1"></i> Dimodifikasi</th>
-                            <th scope="col"><i class="bi bi-hdd me-1"></i> Ukuran</th>
+                            <th scope="col"><i class="bi bi-file-earmark-text me-1"></i> Nama Berkas / Folder</th>
+                            <th scope="col" class="d-none d-md-table-cell"><i class="bi bi-person me-1"></i> Pengunggah</th>
+                            <th scope="col" class="d-none d-lg-table-cell"><i class="bi bi-calendar3 me-1"></i> Dimodifikasi</th>
+                            <th scope="col" class="d-none d-sm-table-cell"><i class="bi bi-hdd me-1"></i> Ukuran</th>
                             <th scope="col" class="text-end"><i class="bi bi-sliders me-1"></i> Aksi</th>
                         </tr>
                     </thead>
@@ -341,7 +343,7 @@
                             } elseif($isExcel) {
                                 $typeClass = 'excel';
                                 $iconClass = 'bi-file-earmark-excel-fill';
-                            } elseif(Str::contains($doc->mime_type, 'zip') || in_array($ext, ['zip', 'rar', '7z', 'tar', 'gz'])) {
+                            } elseif(in_array($ext, ['zip', 'rar', '7z', 'tar', 'gz'])) {
                                 $typeClass = 'archive';
                                 $iconClass = 'bi-file-earmark-zip-fill';
                             } else {
@@ -349,72 +351,78 @@
                                 $iconClass = 'bi-file-earmark-fill';
                             }
                         }
+
+                        $bytes = $doc->is_folder ? $doc->getFolderSize() : $doc->file_size;
+                        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+                        $bytes = max($bytes, 0);
+                        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+                        $pow = min($pow, count($units) - 1);
+                        $formattedSize = round($bytes / pow(1024, $pow), 1) . ' ' . $units[$pow];
                         @endphp
                         <tr draggable="true" data-doc-id="{{ $doc->id }}" data-is-folder="{{ $doc->is_folder ? 'true' : 'false' }}" class="document-row {{ $doc->is_folder ? 'folder-row' : '' }}">
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="file-icon-box {{ $typeClass }} me-3">
+                                    <div class="file-icon-box {{ $typeClass }} me-2 me-sm-3 flex-shrink-0">
                                         <i class="bi {{ $iconClass }}"></i>
                                     </div>
-                                    <div class="d-flex flex-column text-truncate" style="max-width: 650px;">
+                                    <div class="d-flex flex-column overflow-hidden min-w-0 flex-grow-1" style="max-width: 650px;">
                                         <div class="d-flex align-items-center gap-2 mb-1">
                                             @if($doc->is_folder)
                                                 <a href="{{ url('data-File?folder='.$doc->id) }}" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Buka Folder {{ $doc->original_name }}">{{ $doc->original_name }}</a>
-                                                <span class="badge-ext folder">Folder</span>
+                                                <span class="badge-ext folder d-none d-sm-inline-block">Folder</span>
                                             @elseif($desktopOfficeUrl)
                                                 <a href="{{ $desktopOfficeUrl }}" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Klik untuk Buka & Edit di Aplikasi Office Desktop (Auto-Save ke Server)">{{ $doc->original_name }}</a>
-                                                <span class="badge-ext {{ $isWord ? 'word' : 'excel' }}">{{ $ext ?: ($isWord ? 'docx' : 'xlsx') }}</span>
+                                                <span class="badge-ext {{ $isWord ? 'word' : 'excel' }} d-none d-sm-inline-block">{{ $ext ?: ($isWord ? 'docx' : 'xlsx') }}</span>
                                             @elseif(Str::contains($doc->mime_type, 'pdf'))
                                                 <a href="{{ $fileStorageUrl }}" target="_blank" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Buka PDF di Tab Baru">{{ $doc->original_name }}</a>
-                                                <span class="badge-ext pdf">PDF</span>
+                                                <span class="badge-ext pdf d-none d-sm-inline-block">PDF</span>
                                             @elseif(Str::contains($doc->mime_type, 'image'))
                                                 <a href="{{ $fileStorageUrl }}" target="_blank" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Lihat Gambar">{{ $doc->original_name }}</a>
-                                                <span class="badge-ext image">{{ $ext ?: 'IMG' }}</span>
+                                                <span class="badge-ext image d-none d-sm-inline-block">{{ $ext ?: 'IMG' }}</span>
                                             @elseif(Str::contains($doc->mime_type, 'zip') || Str::contains($doc->mime_type, 'rar'))
                                                 <a href="{{ url('data-File/download/'.$doc->id) }}" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Download Arsip">{{ $doc->original_name }}</a>
-                                                <span class="badge-ext archive">{{ $ext ?: 'ZIP' }}</span>
+                                                <span class="badge-ext archive d-none d-sm-inline-block">{{ $ext ?: 'ZIP' }}</span>
                                             @else
                                                 <a href="{{ url('data-File/download/'.$doc->id) }}" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Download File">{{ $doc->original_name }}</a>
-                                                <span class="badge-ext default">{{ $ext ?: 'FILE' }}</span>
+                                                <span class="badge-ext default d-none d-sm-inline-block">{{ $ext ?: 'FILE' }}</span>
                                             @endif
                                         </div>
+                                        <!-- Mobile secondary metadata -->
+                                        <div class="d-flex align-items-center gap-1 flex-wrap text-muted small" style="font-size: 0.72rem;">
+                                            <span class="badge-ext {{ $typeClass }} py-0 px-1 d-sm-none" style="font-size: 0.65rem;">{{ $doc->is_folder ? 'DIR' : strtoupper($ext ?: 'FILE') }}</span>
+                                            <span class="d-sm-none">&bull; {{ $doc->is_folder ? 'Folder' : $formattedSize }}</span>
+                                            <span class="d-md-none">&bull; {{ $doc->owner_name ?? 'Admin' }}</span>
+                                            <span class="d-lg-none">&bull; {{ $doc->created_at->diffForHumans() }}</span>
+                                        </div>
                                         @if(!$doc->is_folder && $desktopOfficeUrl)
-                                        <small class="text-muted d-flex align-items-center gap-1" style="font-size: 0.72rem;">
+                                        <small class="text-muted d-none d-sm-flex align-items-center gap-1 mt-1" style="font-size: 0.72rem;">
                                             <i class="bi bi-cloud-check-fill text-success"></i> Auto-save langsung ke server
                                         </small>
                                         @endif
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td class="d-none d-md-table-cell">
                                 <div class="d-flex align-items-center">
                                     <div class="rounded-circle text-white d-flex align-items-center justify-content-center me-2 fw-bold" style="width: 30px; height: 30px; background: var(--primary-gradient); font-size: 0.72rem; box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);">
                                         {{ strtoupper(substr($doc->owner_name ?? 'A', 0, 1)) }}
                                     </div>
-                                    <span class="text-dark fw-medium small">{{ $doc->owner_name ?? 'Admin' }}</span>
+                                    <span class="text-dark fw-medium small text-nowrap">{{ $doc->owner_name ?? 'Admin' }}</span>
                                 </div>
                             </td>
-                            <td>
-                                <span class="text-muted small fw-medium"><i class="bi bi-clock me-1 opacity-50"></i> {{ $doc->created_at->format('d M, Y') }}</span>
+                            <td class="d-none d-lg-table-cell">
+                                <span class="text-muted small fw-medium text-nowrap"><i class="bi bi-clock me-1 opacity-50"></i> {{ $doc->created_at->format('d M, Y') }}</span>
                             </td>
-                            <td>
-                                <span class="badge bg-white text-secondary border px-2 py-1 shadow-sm" style="font-size: 0.75rem;">
-                                    @php
-                                     $bytes = $doc->is_folder ? $doc->getFolderSize() : $doc->file_size;
-                                    $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-                                    $bytes = max($bytes, 0);
-                                    $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-                                    $pow = min($pow, count($units) - 1);
-                                    $bytes /= pow(1024, $pow);
-                                    echo round($bytes, 2) . ' ' . $units[$pow];
-                                    @endphp
+                            <td class="d-none d-sm-table-cell">
+                                <span class="badge bg-white text-secondary border px-2 py-1 shadow-sm text-nowrap" style="font-size: 0.75rem;">
+                                    {{ $doc->is_folder ? 'Folder' : $formattedSize }}
                                 </span>
                             </td>
-                            <td class="text-end">
+                            <td class="text-end text-nowrap">
                                 <div class="d-flex justify-content-end gap-1">
                                     @if($doc->is_folder)
                                         <a href="{{ url('data-File?folder='.$doc->id) }}" class="action-btn-modern btn-hover-info" title="Buka Folder"><i class="bi bi-folder2-open"></i></a>
-                                        <a href="{{ url('data-File/folder-download/'.$doc->id) }}" class="action-btn-modern btn-hover-success" title="Download Folder (ZIP)"><i class="bi bi-file-earmark-zip-fill"></i></a>
+                                        <a href="{{ url('data-File/folder-download/'.$doc->id) }}" class="action-btn-modern btn-hover-success d-none d-sm-inline-flex" title="Download Folder (ZIP)"><i class="bi bi-file-earmark-zip-fill"></i></a>
                                     @else
                                         @if($isWord)
                                             <!-- Buka di Aplikasi Word Desktop (WebDAV - Auto-save ke Server) -->
@@ -470,10 +478,11 @@
 
             <!-- Pagination Section -->
             @if($documents->hasPages())
-            <div class="pt-3 mt-2 border-top" style="border-color: rgba(0,0,0,0.06) !important;">
+            <div class="p-3 border-top bg-light bg-opacity-25" style="border-color: rgba(0,0,0,0.06) !important;">
                 {{ $documents->links() }}
             </div>
             @endif
+            </div>
         </div>
     </div>
 
