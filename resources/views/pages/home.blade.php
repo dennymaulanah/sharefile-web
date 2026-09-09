@@ -1,80 +1,9 @@
 @extends('layouts.app')
 @section('content')
 
-<style>
-/* Calm & Attractive Colors */
-.hero-calm {
-    background: linear-gradient(135deg, #e0f7fa 0%, #e8f5e9 100%);
-    padding: 100px 0;
-    position: relative;
-    overflow: hidden;
-}
-.hero-calm::after {
-    content: '';
-    position: absolute;
-    bottom: -50px;
-    left: 0;
-    width: 100%;
-    height: 100px;
-    background: #ffffff;
-    transform: skewY(-2deg);
-    z-index: 1;
-}
-.hero-calm .container {
-    position: relative;
-    z-index: 2;
-}
-.hero-calm h1 {
-    color: #006064;
-    font-weight: 700;
-    font-size: 3rem;
-    line-height: 1.2;
-}
-.hero-calm p {
-    color: #004d40;
-    font-size: 1.15rem;
-    opacity: 0.85;
-}
-.img-calm {
-    border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0, 150, 136, 0.15);
-    transition: transform 0.3s ease;
-}
-.img-calm:hover {
-    transform: translateY(-10px);
-}
-.section-title h2 {
-    color: #00796b;
-}
-.section-title span {
-    color: #4db6ac;
-}
-.about-calm {
-    background: #ffffff;
-    padding: 80px 0;
-}
-.about-calm h3 {
-    color: #00695c;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
-.about-calm p {
-    color: #546e7a;
-    line-height: 1.8;
-}
-.btn-calm {
-    background: linear-gradient(135deg, #26a69a, #4db6ac);
-    color: white;
-    border: none;
-    transition: all 0.3s;
-}
-.btn-calm:hover {
-    background: linear-gradient(135deg, #00897b, #26a69a);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(38, 166, 154, 0.4);
-}
-</style>
+@push('styles')
+  <link href="{{ asset('assets/css/home.css') }}" rel="stylesheet">
+@endpush
 
 <!-- Hero Section -->
 <section id="hero" class="hero-calm section">
@@ -115,7 +44,7 @@
         <ul class="list-unstyled mt-4">
           <li class="d-flex mb-3"><i class="bi bi-check-circle-fill fs-5 me-3" style="color: #26a69a !important;"></i> <span>Unggah file super cepat melalui mekanisme drag-and-drop langsung dari OS Anda.</span></li>
           <li class="d-flex mb-3"><i class="bi bi-check-circle-fill fs-5 me-3" style="color: #26a69a !important;"></i> <span>Sistem manajemen folder tak terbatas untuk pengelompokan arsip yang optimal.</span></li>
-          <li class="d-flex mb-3"><i class="bi bi-check-circle-fill fs-5 me-3" style="color: #26a69a !important;"></i> <span>Integrasi canggih dengan Office Lokal (Word, Excel) dan Editor Web internal.</span></li>
+          <li class="d-flex mb-3"><i class="bi bi-check-circle-fill fs-5 me-3" style="color: #26a69a !important;"></i> <span>Integrasi canggih dengan Office Lokal (Word, Excel) & Sinkronisasi Server Otomatis.</span></li>
         </ul>
         <p class="mt-4">
           Dengan integrasi pendataan melalui portal <strong>ShareFile</strong>, setiap pencarian dan kolaborasi dokumen dapat dilakukan secara lebih transparan, aman, dan efisien.

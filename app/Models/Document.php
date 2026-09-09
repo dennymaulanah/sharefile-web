@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Document extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'original_name', 'filename', 'path', 'file_size', 'mime_type', 'owner_name', 'is_folder', 'parent_id'
     ];

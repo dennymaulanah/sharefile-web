@@ -14,20 +14,13 @@
         <link rel="stylesheet" href="https://unpkg.com/x-data-spreadsheet@1.1.9/dist/xspreadsheet.css">
     @endif
     
-    <style>
-        body { margin: 0; padding: 0; background-color: #f8f9fa; height: 100vh; display: flex; flex-direction: column; }
-        .editor-header { background: #fff; padding: 10px 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
-        .editor-header .title { font-size: 1.1rem; font-weight: 600; margin: 0; display: flex; align-items: center;}
-        #editor-container { flex: 1; display: flex; flex-direction: column; position: relative; }
-        .tox-tinymce { border: none !important; border-top: 1px solid #ccc !important; }
-        #loading-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.8); display:flex; align-items:center; justify-content:center; z-index: 1000;}
-    </style>
+    <link href="{{ asset('assets/css/editor.css') }}" rel="stylesheet">
 </head>
 <body>
 
     <div class="editor-header">
         <div class="d-flex align-items-center">
-            <a href="{{ url('data-file') }}" class="btn btn-sm btn-light me-3"><i class="bi bi-arrow-left"></i> Kembali</a>
+            <a href="{{ url('data-File') }}" class="btn btn-sm btn-light me-3"><i class="bi bi-arrow-left"></i> Kembali</a>
             <div class="title">
                 @if(in_array($ext, ['html', 'docx']))
                     <i class="bi bi-file-earmark-word-fill text-primary me-2 fs-4"></i>
@@ -38,8 +31,9 @@
                 <span class="badge bg-secondary ms-3" id="save-status">Memuat...</span>
             </div>
         </div>
-        <div>
-            <button class="btn btn-primary btn-sm px-4" id="btn-save" disabled><i class="bi bi-save"></i> Save</button>
+        <div class="d-flex gap-2">
+            <a href="{{ url('data-File/download/' . $document->id) }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-cloud-arrow-down"></i> Unduh File Asli</a>
+            <button class="btn btn-primary btn-sm px-4" id="btn-save" disabled><i class="bi bi-save"></i> Simpan Perubahan</button>
         </div>
     </div>
 
@@ -59,7 +53,7 @@
 
     @if(in_array($ext, ['html', 'docx']))
         <!-- TinyMCE & Mammoth for Word -->
-        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js"></script>
         @if($ext == 'docx')
             <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
             <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
@@ -71,12 +65,12 @@
             async function initWordEditor() {
                 if ("{{ $ext }}" === 'docx') {
                     try {
-                        const response = await fetch("{{ asset('storage/'.$document->path) }}");
+                        const response = await fetch("{{ url('data-File/download/'.$document->id) }}");
                         const arrayBuffer = await response.arrayBuffer();
                         const result = await mammoth.convertToHtml({arrayBuffer: arrayBuffer});
-                        editorContent = result.value;
+                        editorContent = result.value || '<p></p>';
                     } catch(err) {
-                        alert("Gagal membaca file DOCX.");
+                        alert("Gagal membaca isi file Word.");
                         console.error(err);
                     }
                 }
@@ -88,7 +82,7 @@
                     menubar: 'file edit view insert format tools table help',
                     plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table code help wordcount',
                     toolbar: 'undo redo | blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; padding: 20px; }',
                     setup: function (editor) {
                         editor.on('init', function () {
                             editor.setContent(editorContent);
@@ -139,13 +133,13 @@
                 } else {
                     // Load XLSX/XLS/CSV
                     try {
-                        const response = await fetch("{{ asset('storage/'.$document->path) }}");
+                        const response = await fetch("{{ url('data-File/download/'.$document->id) }}");
                         const arrayBuffer = await response.arrayBuffer();
                         const workbook = XLSX.read(arrayBuffer, {type: 'array'});
                         // Convert SheetJS workbook to x-spreadsheet data array
                         sheetData = stox(workbook);
                     } catch(err) {
-                        alert("Gagal membaca file Excel/CSV.");
+                        alert("Gagal membaca isi file Excel/CSV.");
                         console.error(err);
                     }
                 }
@@ -229,6 +223,94 @@
                 error: handleAjaxError
             });
         }
+
+        @if(session('sharefile_unlocked') && (!Auth::check() || Auth::user()->role !== 'admin'))
+        (function() {
+            const IDLE_TIMEOUT_MS = 5 * 60 * 1000;
+            const PING_INTERVAL_MS = 60 * 1000;
+            const LOCK_URL = "{{ url('/data-File/lock') }}";
+            const PING_URL = "{{ url('/data-File/ping-activity') }}";
+            const CSRF_TOKEN = "{{ csrf_token() }}";
+
+            let lastActivityTime = Date.now();
+            let isLockedTriggered = false;
+            let hasInteractedSinceLastPing = false;
+
+            function resetActivity() {
+                if (isLockedTriggered) return;
+                lastActivityTime = Date.now();
+                hasInteractedSinceLastPing = true;
+            }
+
+            const activityEvents = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click'];
+            activityEvents.forEach(function(evt) {
+                window.addEventListener(evt, resetActivity, { passive: true });
+            });
+
+            const checkInterval = setInterval(function() {
+                if (isLockedTriggered) return;
+                if (Date.now() - lastActivityTime >= IDLE_TIMEOUT_MS) {
+                    triggerAutoLock();
+                }
+            }, 1000);
+
+            const pingInterval = setInterval(function() {
+                if (isLockedTriggered) return;
+                if (hasInteractedSinceLastPing) {
+                    hasInteractedSinceLastPing = false;
+                    fetch(PING_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': CSRF_TOKEN,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        if (data && data.locked) {
+                            triggerAutoLock();
+                        }
+                    })
+                    .catch(function() {});
+                }
+            }, PING_INTERVAL_MS);
+
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden && !isLockedTriggered) {
+                    if (Date.now() - lastActivityTime >= IDLE_TIMEOUT_MS) {
+                        triggerAutoLock();
+                    }
+                }
+            });
+
+            function triggerAutoLock() {
+                if (isLockedTriggered) return;
+                isLockedTriggered = true;
+                clearInterval(checkInterval);
+                clearInterval(pingInterval);
+
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = LOCK_URL;
+
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = CSRF_TOKEN;
+                form.appendChild(csrfInput);
+
+                const reasonInput = document.createElement('input');
+                reasonInput.type = 'hidden';
+                reasonInput.name = 'reason';
+                reasonInput.value = 'idle';
+                form.appendChild(reasonInput);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        })();
+        @endif
     </script>
 </body>
 </html>

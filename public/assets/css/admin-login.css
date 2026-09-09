@@ -1,0 +1,102 @@
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height: 100vh;
+  background: radial-gradient(circle at 10% 20%, rgba(13, 148, 136, 0.12) 0%, rgba(15, 23, 42, 0.03) 90%), #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 440px;
+}
+
+.login-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.07);
+  padding: 2.5rem 2.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #0d9488, #2dd4bf, #0284c7);
+}
+
+.brand-badge {
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.75rem;
+  margin: 0 auto 1.25rem;
+  box-shadow: 0 8px 16px rgba(13, 148, 136, 0.25);
+}
+
+.form-floating > .form-control {
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  height: 3.5rem;
+  padding-left: 1rem;
+}
+
+.form-floating > .form-control:focus {
+  border-color: #0d9488;
+  box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15);
+}
+
+.btn-login {
+  background: linear-gradient(135deg, #0d9488, #0f766e);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0.85rem 1.5rem;
+  border-radius: 12px;
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+}
+
+.btn-login:hover {
+  background: linear-gradient(135deg, #0f766e, #115e59);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(13, 148, 136, 0.35);
+}
+
+.btn-toggle-pw {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.btn-toggle-pw:hover {
+  color: #475569;
+}
+
+.hint-box {
+  background: #f1f5f9;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  color: #475569;
+}

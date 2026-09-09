@@ -27,6 +27,7 @@
   <!-- Main CSS File -->
   <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
 
+  @stack('styles')
 </head>
 
 <body class="index-page">
@@ -42,6 +43,7 @@
         <ul>
           <li><a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Home</a></li>
           <li><a href="{{ url('/data-File') }}" class="{{ request()->is('data-File') ? 'active' : '' }}">Share File</a></li>
+          <li><a href="{{ url('/admin') }}" class="{{ request()->is('admin*') ? 'active' : '' }}"><i class="bi bi-shield-lock-fill me-1"></i> Admin</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
