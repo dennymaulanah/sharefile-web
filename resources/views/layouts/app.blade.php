@@ -33,7 +33,7 @@
 <body class="index-page">
 
   <header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+    <div class="container-fluid px-3 px-sm-4 px-md-5 position-relative d-flex align-items-center" style="max-width: 1750px;">
 
       <a href="{{ url('/') }}" class="logo d-flex align-items-center me-auto">
         <h1 class="sitename">ShareFile</h1>

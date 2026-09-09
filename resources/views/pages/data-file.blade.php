@@ -65,7 +65,7 @@
     </div>
     @endif
 
-    <div class="container py-4 {{ !empty($isLocked) ? 'sharefile-content-locked' : '' }}" data-aos="fade-up" data-aos-duration="800">
+    <div class="container-fluid px-3 px-sm-4 px-md-5 py-4 {{ !empty($isLocked) ? 'sharefile-content-locked' : '' }}" style="max-width: 1750px;" data-aos="fade-up" data-aos-duration="800">
 
         <!-- Alerts -->
         @if(session('success'))
