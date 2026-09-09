@@ -105,70 +105,133 @@
         <div class="glass-card p-4 p-md-5">
 
             <!-- Top Header -->
-            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-5 gap-4">
+            <div class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-center mb-4 gap-4">
 
-                <!-- Brand / Title -->
-                <div class="d-flex align-items-center">
-                    <div class="bg-white rounded-circle p-3 shadow-sm me-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
-                        <i class="bi bi-cloud-check-fill fs-3 text-gradient"></i>
-                    </div>
-                    <div>
-                        <h3 class="fw-bold mb-0 text-dark">Share File</h3>
-                        <p class="text-muted mb-0 fs-6">Kelola dan pantau dokumen Anda</p>
+                <!-- Brand / Title & Stats -->
+                <div>
+                    <div class="d-flex align-items-center">
+                        <div class="bg-white rounded-circle p-3 shadow-sm me-3 d-flex align-items-center justify-content-center" style="width: 58px; height: 58px; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.15) !important;">
+                            <i class="bi bi-cloud-check-fill fs-2 text-gradient"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                                <h3 class="fw-bold mb-0 text-dark">Share File</h3>
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-1 small" style="font-size: 0.72rem;">
+                                    <i class="bi bi-files me-1"></i> {{ $documents->total() }} Item
+                                </span>
+                                @if(empty($isLocked) && session('sharefile_unlocked'))
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1 small" style="font-size: 0.72rem;">
+                                    <i class="bi bi-shield-lock-fill me-1"></i> Auto-Lock 5 Menit
+                                </span>
+                                @endif
+                            </div>
+                            <p class="text-muted mb-0 small">Kelola, unggah, dan pantau berkas Anda secara terpusat di server</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Actions -->
+                <!-- Quick Action Buttons -->
                 <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <!-- Upload File Button -->
+                    <button type="button" class="btn-action-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                        <i class="bi bi-cloud-arrow-up-fill fs-5"></i>
+                        <span>Upload File</span>
+                    </button>
+
+                    <!-- Buat Folder Button -->
+                    <button type="button" class="btn-action-secondary shadow-sm" data-bs-toggle="modal" data-bs-target="#folderModal">
+                        <i class="bi bi-folder-plus text-warning fs-5"></i>
+                        <span>Folder Baru</span>
+                    </button>
+
+                    <!-- More Options Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn-action-secondary shadow-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-gear-fill text-muted"></i>
+                            <span>Lainnya</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end glass-dropdown mt-2 border-0 shadow">
+                            <li>
+                                <a class="dropdown-item py-2 px-3 d-flex align-items-center" href="{{ url('data-File/download-drive-bat') }}">
+                                    <div class="bg-success-subtle text-success rounded p-2 me-3"><i class="bi bi-hdd-network-fill fs-5"></i></div>
+                                    <div>
+                                        <div class="fw-bold">Hubungkan Drive Z:</div>
+                                        <div class="text-muted" style="font-size: 0.75rem;">Akses folder via File Explorer Windows</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item py-2 px-3 d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#networkGuideModal">
+                                    <div class="bg-primary-subtle text-primary rounded p-2 me-3"><i class="bi bi-info-circle-fill fs-5"></i></div>
+                                    <div>
+                                        <div class="fw-bold">Panduan Edit Office</div>
+                                        <div class="text-muted" style="font-size: 0.75rem;">Cara auto-save Word & Excel ke server</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
                     @if(empty($isLocked) && session('sharefile_unlocked'))
                     <form action="{{ url('/data-File/lock') }}" method="POST" class="d-inline m-0">
                         @csrf
-                        <button type="submit" class="btn btn-outline-danger rounded-pill px-3 py-2 d-flex align-items-center gap-1 shadow-sm" title="Kunci Kembali Akses Berkas">
+                        <button type="submit" class="btn btn-outline-danger rounded-pill px-3 py-2 d-flex align-items-center gap-1 shadow-sm small fw-semibold" title="Kunci Kembali Akses Berkas">
                             <i class="bi bi-lock-fill"></i> <span class="d-none d-sm-inline">Kunci Akses</span>
                         </button>
                     </form>
                     @endif
-
-                    <!-- New Button -->
-                    <div class="dropdown">
-                        <button class="btn btn-gradient px-4 py-2 d-flex align-items-center justify-content-center shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-lg me-2 fw-bold"></i> Baru
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end glass-dropdown mt-3 border-0 shadow">
-                            <li><a class="dropdown-item py-2 px-3 d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#folderModal">
-                                    <div class="bg-light rounded p-2 me-3"><i class="bi bi-folder-plus fs-5 text-warning"></i></div>
-                                    <div>
-                                        <div class="fw-bold">Buat Folder</div>
-                                        <div class="text-muted" style="font-size: 0.75rem;">Buat folder baru</div>
-                                    </div>
-                                </a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item py-2 px-3 d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                                    <div class="bg-light rounded p-2 me-3"><i class="bi bi-cloud-arrow-up-fill fs-5 text-primary"></i></div>
-                                    <div>
-                                        <div class="fw-bold">Upload File</div>
-                                        <div class="text-muted" style="font-size: 0.75rem;">Unggah dari komputer</div>
-                                    </div>
-                                </a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item py-2 px-3 d-flex align-items-center" href="{{ url('data-File/download-drive-bat') }}">
-                                    <div class="bg-light rounded p-2 me-3"><i class="bi bi-hdd-network-fill fs-5 text-success"></i></div>
-                                    <div>
-                                        <div class="fw-bold">Hubungkan Drive Z:</div>
-                                        <div class="text-muted" style="font-size: 0.75rem;">Download skrip auto-connect folder server</div>
-                                    </div>
-                                </a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
 
-            <!-- Filter & Search Bar (Mirrors Admin Filter) -->
-            <div class="filter-card p-3 mb-4 rounded-4 shadow-sm" style="background: rgba(255, 255, 255, 0.75); border: 1px solid rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px);">
+            <!-- Breadcrumb Navigation Bar -->
+            <div class="breadcrumb-bar d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                <nav aria-label="breadcrumb">
+                    <ul class="breadcrumb-modern">
+                        <li>
+                            <a href="{{ url('/data-File') }}" class="breadcrumb-item-link {{ !$currentFolder ? 'fw-bold text-primary' : '' }}">
+                                <i class="bi bi-house-door-fill text-primary"></i>
+                                <span>Beranda</span>
+                            </a>
+                        </li>
+                        @if($currentFolder)
+                            @php
+                                $breadcrumbs = [];
+                                $temp = $currentFolder;
+                                while ($temp) {
+                                    array_unshift($breadcrumbs, $temp);
+                                    $temp = $temp->parent;
+                                }
+                            @endphp
+                            @foreach($breadcrumbs as $crumb)
+                                <li class="breadcrumb-separator"><i class="bi bi-chevron-right"></i></li>
+                                <li>
+                                    @if($loop->last)
+                                        <span class="breadcrumb-item-link fw-bold text-dark" style="background: rgba(0,0,0,0.05);">
+                                            <i class="bi bi-folder2-open text-warning"></i>
+                                            <span>{{ $crumb->original_name }}</span>
+                                        </span>
+                                    @else
+                                        <a href="{{ url('data-File?folder='.$crumb->id) }}" class="breadcrumb-item-link">
+                                            <i class="bi bi-folder text-muted"></i>
+                                            <span>{{ $crumb->original_name }}</span>
+                                        </a>
+                                    @endif
+                                </li>
+                            @endforeach
+                        @endif
+                    </ul>
+                </nav>
+
+                @if($currentFolder)
+                <a href="{{ $currentFolder->parent_id ? url('data-File?folder='.$currentFolder->parent_id) : url('data-File') }}" class="btn btn-sm btn-light border rounded-pill px-3 py-1 text-secondary hover-primary d-inline-flex align-items-center gap-1 shadow-sm">
+                    <i class="bi bi-arrow-left"></i> Naik Satu Level
+                </a>
+                @endif
+            </div>
+
+            <!-- Filter & Search Bar -->
+            <div class="filter-card p-3 mb-4 rounded-4 shadow-sm" style="background: rgba(255, 255, 255, 0.78); border: 1px solid rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px);">
                 <form action="{{ url('/data-File') }}" method="GET" class="row g-2 align-items-center">
                     @if(request('folder'))
                     <input type="hidden" name="folder" value="{{ request('folder') }}">
@@ -225,23 +288,15 @@
             </div>
 
             <!-- Table Section -->
-            @if($currentFolder)
-            <div class="d-flex align-items-center mb-3">
-                <a href="{{ $currentFolder->parent_id ? url('data-File?folder='.$currentFolder->parent_id) : url('data-File') }}" class="btn btn-sm btn-light rounded-pill px-3 shadow-sm me-2 hover-primary folder-row" data-doc-id="{{ $currentFolder->parent_id ?? '' }}">
-                    <i class="bi bi-arrow-left me-1"></i> Kembali
-                </a>
-                <span class="text-muted fw-bold">/ {{ $currentFolder->original_name }}</span>
-            </div>
-            @endif
             <div class="table-responsive px-1 pb-3">
                 <table class="table modern-table w-100">
                     <thead>
                         <tr>
-                            <th scope="col" style="min-width: 250px;">Nama File</th>
-                            <th scope="col">Pemilik</th>
-                            <th scope="col">Dimodifikasi</th>
-                            <th scope="col">Ukuran</th>
-                            <th scope="col" class="text-end">Aksi</th>
+                            <th scope="col" style="min-width: 280px;"><i class="bi bi-file-earmark-text me-1"></i> Nama Berkas / Folder</th>
+                            <th scope="col"><i class="bi bi-person me-1"></i> Pengunggah</th>
+                            <th scope="col"><i class="bi bi-calendar3 me-1"></i> Dimodifikasi</th>
+                            <th scope="col"><i class="bi bi-hdd me-1"></i> Ukuran</th>
+                            <th scope="col" class="text-end"><i class="bi bi-sliders me-1"></i> Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="document-table-body">
@@ -271,46 +326,79 @@
                         }
 
                         if($doc->is_folder) {
-                            $iconClass = 'bi-folder-fill text-warning';
+                            $typeClass = 'folder';
+                            $iconClass = 'bi-folder-fill';
                         } else {
-                            $iconClass = 'bi-file-earmark-fill icon-gradient-default';
-                            if(Str::contains($doc->mime_type, 'pdf')) $iconClass = 'bi-file-earmark-pdf-fill icon-gradient-pdf';
-                            elseif(Str::contains($doc->mime_type, 'image')) $iconClass = 'bi-file-earmark-image-fill icon-gradient-image';
-                            elseif($isWord) $iconClass = 'bi-file-earmark-word-fill icon-gradient-word';
-                            elseif($isExcel) $iconClass = 'bi-file-earmark-excel-fill icon-gradient-excel';
-                            elseif(Str::contains($doc->mime_type, 'zip') || Str::contains($doc->mime_type, 'rar')) $iconClass = 'bi-file-earmark-zip-fill icon-gradient-zip';
+                            if(Str::contains($doc->mime_type, 'pdf') || $ext === 'pdf') {
+                                $typeClass = 'pdf';
+                                $iconClass = 'bi-file-earmark-pdf-fill';
+                            } elseif(Str::contains($doc->mime_type, 'image') || in_array($ext, ['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'])) {
+                                $typeClass = 'image';
+                                $iconClass = 'bi-file-earmark-image-fill';
+                            } elseif($isWord) {
+                                $typeClass = 'word';
+                                $iconClass = 'bi-file-earmark-word-fill';
+                            } elseif($isExcel) {
+                                $typeClass = 'excel';
+                                $iconClass = 'bi-file-earmark-excel-fill';
+                            } elseif(Str::contains($doc->mime_type, 'zip') || in_array($ext, ['zip', 'rar', '7z', 'tar', 'gz'])) {
+                                $typeClass = 'archive';
+                                $iconClass = 'bi-file-earmark-zip-fill';
+                            } else {
+                                $typeClass = 'default';
+                                $iconClass = 'bi-file-earmark-fill';
+                            }
                         }
                         @endphp
                         <tr draggable="true" data-doc-id="{{ $doc->id }}" data-is-folder="{{ $doc->is_folder ? 'true' : 'false' }}" class="document-row {{ $doc->is_folder ? 'folder-row' : '' }}">
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="p-2 bg-white rounded-3 shadow-sm me-3">
-                                        <i class="bi {{ $iconClass }} fs-4"></i>
+                                    <div class="file-icon-box {{ $typeClass }} me-3">
+                                        <i class="bi {{ $iconClass }}"></i>
                                     </div>
-                                    @if($doc->is_folder)
-                                        <a href="{{ url('data-File?folder='.$doc->id) }}" class="text-decoration-none fw-semibold text-dark hover-primary">{{ $doc->original_name }}</a>
-                                    @elseif($desktopOfficeUrl)
-                                        <a href="{{ $desktopOfficeUrl }}" class="text-decoration-none fw-semibold text-dark hover-primary" title="Klik untuk Buka & Edit di Aplikasi Office Desktop (Auto-Save ke Server)">{{ $doc->original_name }}</a>
-                                    @elseif(Str::contains($doc->mime_type, 'pdf') || Str::contains($doc->mime_type, 'image') || Str::contains($doc->mime_type, 'text'))
-                                        <a href="{{ $fileStorageUrl }}" target="_blank" class="text-decoration-none fw-semibold text-dark hover-primary" title="Buka di Tab Baru">{{ $doc->original_name }}</a>
-                                    @else
-                                        <a href="{{ url('data-File/download/'.$doc->id) }}" class="text-decoration-none fw-semibold text-dark hover-primary" title="Download File">{{ $doc->original_name }}</a>
-                                    @endif
+                                    <div class="d-flex flex-column text-truncate" style="max-width: 650px;">
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            @if($doc->is_folder)
+                                                <a href="{{ url('data-File?folder='.$doc->id) }}" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Buka Folder {{ $doc->original_name }}">{{ $doc->original_name }}</a>
+                                                <span class="badge-ext folder">Folder</span>
+                                            @elseif($desktopOfficeUrl)
+                                                <a href="{{ $desktopOfficeUrl }}" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Klik untuk Buka & Edit di Aplikasi Office Desktop (Auto-Save ke Server)">{{ $doc->original_name }}</a>
+                                                <span class="badge-ext {{ $isWord ? 'word' : 'excel' }}">{{ $ext ?: ($isWord ? 'docx' : 'xlsx') }}</span>
+                                            @elseif(Str::contains($doc->mime_type, 'pdf'))
+                                                <a href="{{ $fileStorageUrl }}" target="_blank" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Buka PDF di Tab Baru">{{ $doc->original_name }}</a>
+                                                <span class="badge-ext pdf">PDF</span>
+                                            @elseif(Str::contains($doc->mime_type, 'image'))
+                                                <a href="{{ $fileStorageUrl }}" target="_blank" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Lihat Gambar">{{ $doc->original_name }}</a>
+                                                <span class="badge-ext image">{{ $ext ?: 'IMG' }}</span>
+                                            @elseif(Str::contains($doc->mime_type, 'zip') || Str::contains($doc->mime_type, 'rar'))
+                                                <a href="{{ url('data-File/download/'.$doc->id) }}" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Download Arsip">{{ $doc->original_name }}</a>
+                                                <span class="badge-ext archive">{{ $ext ?: 'ZIP' }}</span>
+                                            @else
+                                                <a href="{{ url('data-File/download/'.$doc->id) }}" class="text-decoration-none fw-bold text-dark hover-primary text-truncate fs-6" title="Download File">{{ $doc->original_name }}</a>
+                                                <span class="badge-ext default">{{ $ext ?: 'FILE' }}</span>
+                                            @endif
+                                        </div>
+                                        @if(!$doc->is_folder && $desktopOfficeUrl)
+                                        <small class="text-muted d-flex align-items-center gap-1" style="font-size: 0.72rem;">
+                                            <i class="bi bi-cloud-check-fill text-success"></i> Auto-save langsung ke server
+                                        </small>
+                                        @endif
+                                    </div>
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="rounded-circle text-white d-flex align-items-center justify-content-center me-2 fw-bold" style="width: 28px; height: 28px; background: var(--primary-gradient); font-size: 0.7rem;">
-                                        {{ substr($doc->owner_name ?? 'A', 0, 1) }}
+                                    <div class="rounded-circle text-white d-flex align-items-center justify-content-center me-2 fw-bold" style="width: 30px; height: 30px; background: var(--primary-gradient); font-size: 0.72rem; box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);">
+                                        {{ strtoupper(substr($doc->owner_name ?? 'A', 0, 1)) }}
                                     </div>
-                                    <span class="text-dark fw-medium">{{ $doc->owner_name ?? 'Admin' }}</span>
+                                    <span class="text-dark fw-medium small">{{ $doc->owner_name ?? 'Admin' }}</span>
                                 </div>
                             </td>
                             <td>
-                                <span class="text-muted fw-medium"><i class="bi bi-clock me-1 opacity-50"></i> {{ $doc->created_at->format('d M, Y') }}</span>
+                                <span class="text-muted small fw-medium"><i class="bi bi-clock me-1 opacity-50"></i> {{ $doc->created_at->format('d M, Y') }}</span>
                             </td>
                             <td>
-                                <span class="badge bg-light text-dark border px-2 py-1">
+                                <span class="badge bg-white text-secondary border px-2 py-1 shadow-sm" style="font-size: 0.75rem;">
                                     @php
                                      $bytes = $doc->is_folder ? $doc->getFolderSize() : $doc->file_size;
                                     $units = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -358,15 +446,20 @@
                         @empty
                         <tr>
                             <td colspan="5">
-                                <div class="text-center py-5 my-4">
-                                    <div class="d-inline-block p-4 rounded-circle bg-white shadow-sm mb-4">
-                                        <i class="bi bi-folder-x text-muted" style="font-size: 3rem;"></i>
+                                <div class="text-center py-5 my-3">
+                                    <div class="d-inline-flex p-4 rounded-4 bg-white shadow-sm mb-3 text-muted" style="border: 1px solid rgba(0,0,0,0.05);">
+                                        <i class="bi bi-folder2-open display-4 opacity-50 text-warning"></i>
                                     </div>
-                                    <h4 class="fw-bold text-dark">Ruang Kerja Kosong</h4>
-                                    <p class="text-muted">Belum ada dokumen yang diunggah. Mulai tambahkan file baru.</p>
-                                    <button class="btn btn-gradient mt-2" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                                        <i class="bi bi-cloud-upload me-2"></i> Upload File Pertama
-                                    </button>
+                                    <h5 class="fw-bold text-dark mb-1">Belum Ada Berkas di Sini</h5>
+                                    <p class="text-muted small mb-3">Folder ini masih kosong atau belum ada berkas yang cocok dengan filter pencarian Anda.</p>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <button type="button" class="btn-action-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                                            <i class="bi bi-cloud-arrow-up-fill"></i> Upload File
+                                        </button>
+                                        <button type="button" class="btn-action-secondary shadow-sm" data-bs-toggle="modal" data-bs-target="#folderModal">
+                                            <i class="bi bi-folder-plus text-warning"></i> Folder Baru
+                                        </button>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
