@@ -716,4 +716,235 @@ textarea,
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+/* Unified Card combining Filter Bar and Table into 1 Single Card */
+.unified-table-card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.table-filter-header {
+    background: rgba(255, 255, 255, 0.6);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.unified-table-card .table-responsive {
+    margin: 0;
+    padding: 0;
+}
+
+.unified-table-card .modern-table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.unified-table-card .modern-table thead th {
+    background: rgba(248, 250, 252, 0.8);
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.8px;
+    padding: 14px 20px;
+    border-top: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.unified-table-card .modern-table thead th:first-child {
+    padding-left: 24px;
+}
+
+.unified-table-card .modern-table thead th:last-child {
+    padding-right: 24px;
+}
+
+.unified-table-card .modern-table tbody tr {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background: transparent;
+    box-shadow: none;
+    transition: background-color 0.2s ease;
+}
+
+.unified-table-card .modern-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.unified-table-card .modern-table tbody tr:hover {
+    transform: none;
+    box-shadow: none;
+    background: rgba(79, 70, 229, 0.035);
+}
+
+.unified-table-card .modern-table tbody tr:hover td {
+    background: transparent;
+}
+
+.unified-table-card .modern-table td {
+    background: transparent;
+    padding: 16px 20px;
+    border-radius: 0 !important;
+}
+
+.unified-table-card .modern-table td:first-child {
+    padding-left: 24px;
+}
+
+.unified-table-card .modern-table td:last-child {
+    padding-right: 24px;
+}
+
+/* ==========================================================================
+   Responsive Web Design (Mobile & Tablet Breakpoints)
+   ========================================================================== */
+
+/* Tablet & Smaller Devices (<= 991.98px) */
+@media (max-width: 991.98px) {
+    .glass-card {
+        border-radius: 20px;
+    }
+
+    .header-icon {
+        width: 46px !important;
+        height: 46px !important;
+        min-width: 46px !important;
+    }
+
+    .header-icon i {
+        font-size: 1.4rem !important;
+    }
+
+    .header-title {
+        font-size: 1.35rem !important;
+    }
+
+    .unified-table-card .modern-table thead th,
+    .unified-table-card .modern-table td {
+        padding: 12px 14px;
+    }
+
+    .unified-table-card .modern-table thead th:first-child,
+    .unified-table-card .modern-table td:first-child {
+        padding-left: 16px;
+    }
+
+    .unified-table-card .modern-table thead th:last-child,
+    .unified-table-card .modern-table td:last-child {
+        padding-right: 16px;
+    }
+}
+
+/* Mobile Landscape & Portrait (<= 767.98px) */
+@media (max-width: 767.98px) {
+    .glass-card {
+        border-radius: 16px;
+    }
+
+    .breadcrumb-bar {
+        border-radius: 12px;
+        padding: 8px 12px;
+    }
+
+    .breadcrumb-modern {
+        font-size: 0.8rem;
+    }
+
+    .table-filter-header {
+        padding: 12px 14px !important;
+    }
+
+    .table-filter-header .form-control,
+    .table-filter-header .form-select,
+    .table-filter-header .btn {
+        font-size: 0.85rem;
+    }
+
+    .file-icon-box {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 1.25rem;
+        border-radius: 10px;
+    }
+
+    .action-btn-modern {
+        width: 34px;
+        height: 34px;
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+
+    /* Floating upload widget full width at bottom of screen */
+    .upload-progress-widget {
+        bottom: 12px !important;
+        right: 12px !important;
+        left: 12px !important;
+        width: auto !important;
+        max-width: none !important;
+        border-radius: 16px;
+    }
+}
+
+/* Small Mobile Phones (<= 575.98px) */
+@media (max-width: 575.98px) {
+    .glass-card {
+        border-radius: 14px;
+    }
+
+    .header-title {
+        font-size: 1.2rem !important;
+    }
+
+    .header-subtitle {
+        font-size: 0.75rem !important;
+    }
+
+    .btn-action-primary,
+    .btn-action-secondary {
+        font-size: 0.82rem;
+        padding: 8px 12px;
+    }
+
+    .unified-table-card .modern-table thead th {
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+        padding: 10px 10px;
+    }
+
+    .unified-table-card .modern-table td {
+        padding: 10px 10px;
+    }
+
+    .unified-table-card .modern-table thead th:first-child,
+    .unified-table-card .modern-table td:first-child {
+        padding-left: 12px;
+    }
+
+    .unified-table-card .modern-table thead th:last-child,
+    .unified-table-card .modern-table td:last-child {
+        padding-right: 12px;
+    }
+
+    .action-btn-modern {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+
+    .lock-card {
+        width: 94%;
+        padding: 24px 16px;
+        border-radius: 20px;
+    }
+
+    .modal-dropzone {
+        padding: 20px 14px;
+    }
+}
+
+
+
 
