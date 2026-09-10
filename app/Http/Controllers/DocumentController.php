@@ -701,6 +701,105 @@ class DocumentController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function batchMove(Request $request)
+    {
+        $request->validate([
+            'doc_ids' => 'required|array|min:1',
+            'doc_ids.*' => 'required|exists:documents,id',
+            'parent_id' => 'nullable|exists:documents,id'
+        ]);
+
+        $targetParentId = $request->parent_id;
+        $targetDir = '';
+        if ($targetParentId) {
+            $newParent = Document::find($targetParentId);
+            if ($newParent && !empty($newParent->path)) {
+                $targetDir = trim($newParent->path, '/');
+            }
+        }
+
+        $movedCount = 0;
+
+        foreach ($request->doc_ids as $id) {
+            $document = Document::find($id);
+            if (!$document) continue;
+
+            // Jangan izinkan folder dipindah ke dirinya sendiri
+            if ($document->is_folder && $document->id == $targetParentId) {
+                continue;
+            }
+
+            // Jangan izinkan folder dipindah ke dalam salah satu subfolder / descendant-nya sendiri
+            if ($document->is_folder && $targetParentId) {
+                $isDescendant = false;
+                $tempParent = Document::find($targetParentId);
+                while ($tempParent) {
+                    if ($tempParent->id == $document->id) {
+                        $isDescendant = true;
+                        break;
+                    }
+                    $tempParent = $tempParent->parent_id ? Document::find($tempParent->parent_id) : null;
+                }
+                if ($isDescendant) {
+                    continue;
+                }
+            }
+
+            // Jika sudah berada di folder target yang sama, lewati
+            if ($document->parent_id == $targetParentId) {
+                continue;
+            }
+
+            $oldPath = $document->path;
+            $itemName = $document->is_folder ? $document->original_name : $document->filename;
+            $newPath = $targetDir ? $targetDir . '/' . $itemName : $itemName;
+
+            if ($document->is_folder) {
+                if (!empty($oldPath) && $oldPath !== $newPath) {
+                    $oldFullPath = Storage::disk('public')->path($oldPath);
+                    $newFullPath = Storage::disk('public')->path($newPath);
+                    if (is_dir($oldFullPath)) {
+                        @rename($oldFullPath, $newFullPath);
+                    }
+
+                    // Update path semua descendant
+                    $descendants = Document::where('path', 'like', $oldPath . '/%')->get();
+                    foreach ($descendants as $descendant) {
+                        $descendant->update([
+                            'path' => $newPath . substr($descendant->path, strlen($oldPath))
+                        ]);
+                    }
+                }
+
+                $document->update([
+                    'parent_id' => $targetParentId,
+                    'path' => $newPath
+                ]);
+            } else {
+                if (!empty($oldPath) && $oldPath !== $newPath) {
+                    $oldFullPath = Storage::disk('public')->path($oldPath);
+                    $newFullPath = Storage::disk('public')->path($newPath);
+                    if (file_exists($oldFullPath)) {
+                        @rename($oldFullPath, $newFullPath);
+                    }
+                }
+
+                $document->update([
+                    'parent_id' => $targetParentId,
+                    'path' => $newPath
+                ]);
+            }
+
+            $movedCount++;
+        }
+
+        return response()->json([
+            'success' => true,
+            'count' => $movedCount,
+            'message' => $movedCount . ' item berhasil dipindahkan.'
+        ]);
+    }
+
     public function destroy($id)
     {
         $document = Document::findOrFail($id);
@@ -710,6 +809,33 @@ class DocumentController extends Controller
         $this->softDeleteRecursively($document);
 
         return redirect()->back()->with('success', $isFolder ? "Folder '$name' dan seluruh isinya berhasil dipindahkan ke Tempat Sampah." : "File '$name' berhasil dipindahkan ke Tempat Sampah.");
+    }
+
+    public function batchDestroy(Request $request)
+    {
+        $request->validate([
+            'doc_ids' => 'required|array|min:1',
+            'doc_ids.*' => 'required|exists:documents,id'
+        ]);
+
+        $deletedCount = 0;
+        foreach ($request->doc_ids as $id) {
+            $document = Document::find($id);
+            if ($document) {
+                $this->softDeleteRecursively($document);
+                $deletedCount++;
+            }
+        }
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'count' => $deletedCount,
+                'message' => $deletedCount . ' item berhasil dipindahkan ke Tempat Sampah.'
+            ]);
+        }
+
+        return redirect()->back()->with('success', $deletedCount . ' item berhasil dipindahkan ke Tempat Sampah.');
     }
 
     private function softDeleteRecursively($document)

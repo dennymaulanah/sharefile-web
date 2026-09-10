@@ -54,6 +54,8 @@ foreach (['/data-File', '/data-file'] as $prefix) {
             Route::post('/folder', [DocumentController::class, 'createFolder']);
             Route::put('/rename/{id}', [DocumentController::class, 'rename']);
             Route::put('/move/{id}', [DocumentController::class, 'move']);
+            Route::post('/batch-move', [DocumentController::class, 'batchMove'])->name('sharefile.batch-move');
+            Route::post('/batch-delete', [DocumentController::class, 'batchDestroy'])->name('sharefile.batch-delete');
             Route::get('/folder-download/{id}', [DocumentController::class, 'downloadFolder']);
             Route::post('/create-web-doc', [DocumentController::class, 'createWebDoc']);
             Route::get('/editor/{id}', [DocumentController::class, 'editor']);

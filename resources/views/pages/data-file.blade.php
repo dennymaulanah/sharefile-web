@@ -5,7 +5,245 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 @push('styles')
-  <link href="{{ asset('assets/css/data-file.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/css/data-file.css') }}?v={{ file_exists(public_path('assets/css/data-file.css')) ? filemtime(public_path('assets/css/data-file.css')) : time() }}" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       Floating Batch Action Bar & Mobile Responsive Styling
+       ========================================================================== */
+    .batch-action-bar {
+        position: fixed !important;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        z-index: 1080 !important;
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+        max-width: 95vw;
+        display: none;
+    }
+
+    .batch-action-bar.show {
+        transform: translateX(-50%) translateY(0) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    .batch-bar-inner {
+        background: rgba(15, 23, 42, 0.94) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        border-radius: 50px !important;
+        padding: 8px 14px 8px 12px !important;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        color: #ffffff !important;
+    }
+
+    .batch-counter-badge {
+        background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%) !important;
+        color: #ffffff !important;
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
+        padding: 6px 12px !important;
+        border-radius: 30px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4) !important;
+        white-space: nowrap !important;
+    }
+
+    .batch-drag-hint {
+        font-size: 0.78rem !important;
+        color: #cbd5e1 !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.18) !important;
+        padding-left: 10px !important;
+        white-space: nowrap !important;
+    }
+
+    .batch-actions-btns {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin-left: auto !important;
+    }
+
+    .batch-btn-delete {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+        color: #ffffff !important;
+        border: none !important;
+        border-radius: 30px !important;
+        padding: 7px 16px !important;
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 3px 10px rgba(239, 68, 68, 0.35) !important;
+        cursor: pointer !important;
+        white-space: nowrap !important;
+    }
+
+    .batch-btn-delete:hover,
+    .batch-btn-delete:active {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 5px 14px rgba(239, 68, 68, 0.5) !important;
+        color: #ffffff !important;
+    }
+
+    .batch-btn-cancel {
+        background: rgba(255, 255, 255, 0.12) !important;
+        color: #e2e8f0 !important;
+        border: none !important;
+        border-radius: 30px !important;
+        padding: 7px 14px !important;
+        font-size: 0.82rem !important;
+        font-weight: 500 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        transition: all 0.2s ease !important;
+        cursor: pointer !important;
+        white-space: nowrap !important;
+    }
+
+    .batch-btn-cancel:hover,
+    .batch-btn-cancel:active {
+        background: rgba(255, 255, 255, 0.22) !important;
+        color: #ffffff !important;
+    }
+
+    /* Modern Checkbox Column */
+    .th-checkbox,
+    .td-checkbox {
+        width: 44px;
+        min-width: 44px;
+        max-width: 48px;
+        text-align: center;
+        vertical-align: middle !important;
+        padding-left: 12px !important;
+        padding-right: 6px !important;
+    }
+
+    .custom-checkbox-wrapper {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        cursor: pointer;
+        user-select: none;
+        width: 32px;
+        height: 32px;
+    }
+
+    .form-check-input-modern {
+        width: 19px;
+        height: 19px;
+        margin: 0;
+        cursor: pointer;
+        background-color: #fff;
+        border: 1.8px solid #cbd5e1;
+        border-radius: 6px;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-check-input-modern:hover {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    .form-check-input-modern:checked {
+        background-color: #4f46e5;
+        border-color: #4f46e5;
+        box-shadow: 0 2px 6px rgba(79, 70, 229, 0.35);
+    }
+
+    .form-check-input-modern:indeterminate {
+        background-color: #6366f1;
+        border-color: #6366f1;
+    }
+
+    /* Selected Table Row Highlighting without column shift */
+    .document-row.table-row-selected {
+        background-color: rgba(99, 102, 241, 0.08) !important;
+    }
+
+    .document-row.table-row-selected td {
+        background-color: transparent !important;
+    }
+
+    .document-row.table-row-selected td:first-child {
+        box-shadow: inset 4px 0 0 #4f46e5 !important;
+    }
+
+    /* Mobile Specific Optimizations */
+    @media (max-width: 767.98px) {
+        .batch-action-bar {
+            bottom: 16px !important;
+            width: calc(100% - 24px) !important;
+            max-width: 460px !important;
+            left: 50% !important;
+            transform: translateX(-50%) translateY(100px) !important;
+        }
+
+        .batch-action-bar.show {
+            transform: translateX(-50%) translateY(0) !important;
+        }
+
+        .batch-bar-inner {
+            width: 100% !important;
+            padding: 7px 10px !important;
+            justify-content: space-between !important;
+            gap: 6px !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        .batch-counter-badge {
+            font-size: 0.75rem !important;
+            padding: 5px 10px !important;
+        }
+
+        .batch-btn-delete {
+            padding: 6px 12px !important;
+            font-size: 0.78rem !important;
+        }
+
+        .batch-btn-cancel {
+            padding: 6px 10px !important;
+            font-size: 0.78rem !important;
+        }
+
+        .th-checkbox,
+        .td-checkbox {
+            width: 36px !important;
+            min-width: 36px !important;
+            max-width: 40px !important;
+            padding-left: 8px !important;
+            padding-right: 2px !important;
+        }
+
+        .custom-checkbox-wrapper {
+            width: 28px !important;
+            height: 28px !important;
+        }
+
+        .form-check-input-modern {
+            width: 18px !important;
+            height: 18px !important;
+        }
+
+        .file-title-container {
+            max-width: calc(100vw - 165px) !important;
+        }
+    }
+  </style>
 @endpush
 
 <section id="data-File" class="data-File-bg py-2 py-sm-3 py-md-4">
@@ -294,6 +532,11 @@
                 <table class="table modern-table w-100">
                     <thead>
                         <tr>
+                            <th scope="col" class="th-checkbox">
+                                <div class="custom-checkbox-wrapper" title="Pilih Semua">
+                                    <input type="checkbox" id="selectAllCheckbox" class="form-check-input-modern" aria-label="Pilih Semua Berkas dan Folder">
+                                </div>
+                            </th>
                             <th scope="col"><i class="bi bi-file-earmark-text me-1"></i> Nama Berkas / Folder</th>
                             <th scope="col" class="d-none d-md-table-cell"><i class="bi bi-person me-1"></i> Pengunggah</th>
                             <th scope="col" class="d-none d-lg-table-cell"><i class="bi bi-calendar3 me-1"></i> Dimodifikasi</th>
@@ -359,7 +602,12 @@
                         $pow = min($pow, count($units) - 1);
                         $formattedSize = round($bytes / pow(1024, $pow), 1) . ' ' . $units[$pow];
                         @endphp
-                        <tr draggable="true" data-doc-id="{{ $doc->id }}" data-is-folder="{{ $doc->is_folder ? 'true' : 'false' }}" class="document-row {{ $doc->is_folder ? 'folder-row' : '' }}">
+                        <tr draggable="true" data-doc-id="{{ $doc->id }}" data-is-folder="{{ $doc->is_folder ? 'true' : 'false' }}" data-doc-name="{{ $doc->original_name }}" class="document-row {{ $doc->is_folder ? 'folder-row' : '' }}">
+                            <td class="td-checkbox">
+                                <div class="custom-checkbox-wrapper">
+                                    <input type="checkbox" class="form-check-input-modern doc-checkbox" value="{{ $doc->id }}" data-doc-id="{{ $doc->id }}" data-doc-name="{{ $doc->original_name }}" data-is-folder="{{ $doc->is_folder ? 'true' : 'false' }}" aria-label="Pilih {{ $doc->original_name }}">
+                                </div>
+                            </td>
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="file-icon-box {{ $typeClass }} me-2 me-sm-3 flex-shrink-0">
@@ -499,7 +747,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5">
+                            <td colspan="6">
                                 <div class="text-center py-5 my-3">
                                     <div class="d-inline-flex p-4 rounded-4 bg-white shadow-sm mb-3 text-muted" style="border: 1px solid rgba(0,0,0,0.05);">
                                         <i class="bi bi-folder2-open display-4 opacity-50 text-warning"></i>
@@ -549,18 +797,139 @@
             <span class="fw-semibold" id="uploadWidgetPercent" style="font-size: 0.78rem;">0%</span>
         </div>
     </div>
+
+    <!-- Floating Batch Action Bar -->
+    <div id="batchActionBar" class="batch-action-bar" style="display: none;">
+        <div class="batch-bar-inner">
+            <div class="batch-counter-badge">
+                <i class="bi bi-check2-circle fs-6"></i>
+                <span id="batchCountText">0 Terpilih</span>
+            </div>
+            <div class="batch-drag-hint d-none d-lg-flex align-items-center gap-1">
+                <i class="bi bi-arrows-move text-primary"></i>
+                <span>Tarik ke folder tujuan untuk pindah</span>
+            </div>
+            <div class="batch-actions-btns">
+                <button type="button" class="batch-btn-delete" onclick="openBatchDeleteConfirm()">
+                    <i class="bi bi-trash3-fill"></i>
+                    <span class="d-none d-sm-inline">Pindahkan ke Sampah</span>
+                    <span class="d-sm-none">Hapus</span>
+                </button>
+                <button type="button" class="batch-btn-cancel" onclick="clearBatchSelection()" title="Batalkan Pilihan">
+                    <i class="bi bi-x-lg"></i>
+                    <span class="d-none d-sm-inline">Batal</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </section>
 
 <!-- Scripts -->
 <script>
+    // State global untuk batch selection
+    window.selectedDocIds = new Set();
+
+    function updateBatchSelectionUI() {
+        const totalSelected = window.selectedDocIds.size;
+        const bar = document.getElementById('batchActionBar');
+        const countText = document.getElementById('batchCountText');
+        const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        const allCheckboxes = document.querySelectorAll('.doc-checkbox');
+
+        if (countText) {
+            countText.textContent = totalSelected + ' Terpilih';
+        }
+
+        if (totalSelected > 0) {
+            if (bar) {
+                bar.style.display = 'block';
+                void bar.offsetHeight; // Force reflow
+                bar.classList.add('show');
+            }
+        } else {
+            if (bar) {
+                bar.classList.remove('show');
+                setTimeout(() => {
+                    if (!bar.classList.contains('show')) {
+                        bar.style.display = 'none';
+                    }
+                }, 300);
+            }
+        }
+
+        // Update status master checkbox (semua terpilih / sebagian / tidak ada)
+        if (selectAllCheckbox && allCheckboxes.length > 0) {
+            const checkedCount = document.querySelectorAll('.doc-checkbox:checked').length;
+            if (checkedCount === 0) {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = false;
+            } else if (checkedCount === allCheckboxes.length) {
+                selectAllCheckbox.checked = true;
+                selectAllCheckbox.indeterminate = false;
+            } else {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = true;
+            }
+        }
+    }
+
+    function clearBatchSelection() {
+        window.selectedDocIds.clear();
+        document.querySelectorAll('.doc-checkbox').forEach(cb => {
+            cb.checked = false;
+            const row = cb.closest('.document-row');
+            if (row) row.classList.remove('table-row-selected');
+        });
+        updateBatchSelectionUI();
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         @if(session('open_upload_modal'))
         var uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
         uploadModal.show();
         @endif
 
+        // Listener untuk checkbox per baris dan master checkbox
+        document.addEventListener('change', function(e) {
+            if (e.target.matches('.doc-checkbox')) {
+                const cb = e.target;
+                const id = cb.value;
+                const row = cb.closest('.document-row');
+
+                if (cb.checked) {
+                    window.selectedDocIds.add(id);
+                    if (row) row.classList.add('table-row-selected');
+                } else {
+                    window.selectedDocIds.delete(id);
+                    if (row) row.classList.remove('table-row-selected');
+                }
+                updateBatchSelectionUI();
+            } else if (e.target.id === 'selectAllCheckbox') {
+                const isChecked = e.target.checked;
+                const allCheckboxes = document.querySelectorAll('.doc-checkbox');
+                allCheckboxes.forEach(cb => {
+                    cb.checked = isChecked;
+                    const id = cb.value;
+                    const row = cb.closest('.document-row');
+                    if (isChecked) {
+                        window.selectedDocIds.add(id);
+                        if (row) row.classList.add('table-row-selected');
+                    } else {
+                        window.selectedDocIds.delete(id);
+                        if (row) row.classList.remove('table-row-selected');
+                    }
+                });
+                updateBatchSelectionUI();
+            }
+        });
+
         // Auto-refresh mekanisme (Polling setiap 3 detik)
         setInterval(function() {
+            // Jeda auto-refresh jika user sedang memilih item, sedang drag, atau modal/dropdown sedang aktif
+            if (window.selectedDocIds && window.selectedDocIds.size > 0) return;
+            if (draggedRow != null || (draggedIds && draggedIds.length > 0)) return;
+            if (document.querySelector('.modal.show') || document.querySelector('.dropdown-menu.show')) return;
+
             fetch(window.location.href, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
@@ -576,11 +945,9 @@
                     const currentTbody = document.getElementById('document-table-body');
 
                     if (newTbody && currentTbody) {
-                        // Jangan update DOM jika dropdown aksi sedang terbuka
-                        if (document.querySelector('.dropdown-menu.show')) {
+                        if (document.querySelector('.dropdown-menu.show') || (window.selectedDocIds && window.selectedDocIds.size > 0)) {
                             return;
                         }
-                        // Hanya update DOM jika ada perubahan HTML (untuk menghemat resource)
                         if (newTbody.innerHTML !== currentTbody.innerHTML) {
                             currentTbody.innerHTML = newTbody.innerHTML;
                         }
@@ -602,26 +969,61 @@
                 input.value = docName;
             });
         }
-        // Setup Drag and Drop via Event Delegation
+
+        // Setup Drag and Drop via Event Delegation (Support Single & Multi Drag)
         var draggedRow = null;
+        var draggedIds = [];
         var glassCard = document.querySelector('.glass-card');
 
         document.addEventListener('dragstart', function(e) {
             var target = e.target.closest('.document-row');
             if (target) {
                 draggedRow = target;
+                var currentId = target.getAttribute('data-doc-id');
+
+                // Jika baris yang ditarik adalah bagian dari checkbox yang dicentang, pindahkan SEMUA item yang dicentang!
+                if (window.selectedDocIds && window.selectedDocIds.has(currentId)) {
+                    draggedIds = Array.from(window.selectedDocIds);
+                } else {
+                    // Jika ditarik langsung tanpa centang, hanya pindahkan baris tersebut
+                    draggedIds = [currentId];
+                }
+
                 e.dataTransfer.effectAllowed = 'move';
-                setTimeout(() => target.style.opacity = '0.5', 0);
+                e.dataTransfer.setData('text/plain', JSON.stringify(draggedIds));
+
+                // Jika memindahkan lebih dari 1 item, buat preview drag ghost yang rapi
+                if (draggedIds.length > 1) {
+                    const ghost = document.createElement('div');
+                    ghost.className = 'drag-multi-ghost';
+                    ghost.innerHTML = `<i class="bi bi-files text-warning fs-6"></i> <span>Memindahkan ${draggedIds.length} item</span>`;
+                    document.body.appendChild(ghost);
+                    e.dataTransfer.setDragImage(ghost, 15, 15);
+                    setTimeout(() => ghost.remove(), 0);
+
+                    draggedIds.forEach(id => {
+                        const r = document.querySelector(`tr[data-doc-id="${id}"]`);
+                        if (r) r.style.opacity = '0.45';
+                    });
+                } else {
+                    setTimeout(() => target.style.opacity = '0.5', 0);
+                }
             }
         });
 
         document.addEventListener('dragend', function(e) {
-            var target = e.target.closest('.document-row');
-            if (target) {
-                target.style.opacity = '1';
-                document.querySelectorAll('.folder-row').forEach(f => f.classList.remove('drag-over'));
-                draggedRow = null;
+            if (draggedIds && draggedIds.length > 0) {
+                draggedIds.forEach(id => {
+                    const r = document.querySelector(`tr[data-doc-id="${id}"]`);
+                    if (r) r.style.opacity = '1';
+                });
             }
+            if (draggedRow) {
+                draggedRow.style.opacity = '1';
+            }
+            document.querySelectorAll('.folder-row').forEach(f => f.classList.remove('drag-over'));
+            draggedRow = null;
+            draggedIds = [];
         });
 
         let dragCounter = 0;
@@ -646,10 +1048,14 @@
         document.addEventListener('dragover', function(e) {
             e.preventDefault(); // allow drop
 
-            // Handle moving documents into folders
+            // Handle hover ke folder target untuk memindahkan berkas
             var targetFolder = e.target.closest('.folder-row');
-            if (targetFolder && draggedRow && draggedRow !== targetFolder) {
-                targetFolder.classList.add('drag-over');
+            if (targetFolder && draggedIds && draggedIds.length > 0) {
+                var targetFolderId = targetFolder.getAttribute('data-doc-id');
+                // Jangan sorot folder jika folder tujuan adalah salah satu dari item yang sedang dipindahkan
+                if (!draggedIds.includes(targetFolderId)) {
+                    targetFolder.classList.add('drag-over');
+                }
             }
 
             if (!draggedRow && e.dataTransfer && Array.from(e.dataTransfer.types).includes('Files')) {
@@ -668,34 +1074,57 @@
                 targetFolder.classList.remove('drag-over');
             }
 
-            // Case 1: Moving existing document into another folder inside web UI
-            if (draggedRow && targetFolder && draggedRow !== targetFolder) {
-                var draggedId = draggedRow.getAttribute('data-doc-id');
+            // Kasus 1: Memindahkan berkas/folder di dalam web UI (Single atau Batch)
+            if (draggedIds && draggedIds.length > 0 && targetFolder) {
                 var targetFolderId = targetFolder.getAttribute('data-doc-id');
 
-                fetch("{{ url('data-File/move') }}/" + draggedId, {
-                        method: 'PUT',
+                // Validasi: tidak boleh memindahkan ke folder yang termasuk dalam daftar yang dipindah
+                if (draggedIds.includes(targetFolderId)) {
+                    return;
+                }
+
+                const targetFolderName = targetFolder.getAttribute('data-doc-name') || 'folder';
+                const movingCount = draggedIds.length;
+                const movingIdsCopy = [...draggedIds];
+
+                fetch("{{ url('data-File/batch-move') }}", {
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
                         },
                         body: JSON.stringify({
+                            doc_ids: movingIdsCopy,
                             parent_id: targetFolderId
                         })
                     })
                     .then(res => res.json())
                     .then(data => {
                         if (data.success) {
-                            draggedRow.style.display = 'none';
+                            movingIdsCopy.forEach(id => {
+                                const row = document.querySelector(`tr[data-doc-id="${id}"]`);
+                                if (row) {
+                                    row.style.transition = 'all 0.3s ease';
+                                    row.style.opacity = '0';
+                                    row.style.transform = 'scale(0.95)';
+                                    setTimeout(() => row.remove(), 300);
+                                }
+                            });
+                            clearBatchSelection();
+                            showActionToast(`${data.count || movingCount} item berhasil dipindahkan ke folder "${targetFolderName}".`);
                         } else {
-                            alert(data.message || 'Gagal memindahkan file.');
+                            alert(data.message || 'Gagal memindahkan berkas.');
                         }
                     })
-                    .catch(err => console.error(err));
+                    .catch(err => {
+                        console.error(err);
+                        alert('Terjadi kesalahan koneksi saat memindahkan berkas.');
+                    });
                 return;
             }
 
-            // Case 2: Dropping files or folders from OS
+            // Kasus 2: Upload file / folder dari sistem operasi lokal
             if (!draggedRow && e.dataTransfer) {
                 const files = await getFilesFromDataTransfer(e.dataTransfer);
                 if (files && files.length > 0) {
@@ -1134,7 +1563,171 @@
     </div>
 </div>
 
+<!-- Modern Centered Batch Delete Confirmation Modal -->
+<div class="modal fade" id="batchDeleteConfirmModal" tabindex="-1" aria-labelledby="batchDeleteConfirmTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 460px;">
+        <div class="modal-content modal-glass border-0 rounded-4 shadow-lg overflow-hidden">
+            <div class="modal-body text-center p-4 pt-4 pb-3">
+                <div class="delete-icon-pulse mb-3 mx-auto">
+                    <i class="bi bi-trash3-fill"></i>
+                </div>
+                <h5 class="fw-bold text-dark mb-2" id="batchDeleteConfirmTitle">Pindahkan Item Terpilih ke Sampah?</h5>
+                <p class="text-muted small mb-3">
+                    Apakah Anda yakin ingin memindahkan <strong id="batchDeleteCountNotice" class="text-danger">0 item</strong> sekaligus ke Tempat Sampah:
+                </p>
+                <div class="batch-delete-list-container text-start mb-3" id="batchDeleteItemsList">
+                    <!-- Dinamis terisi via JavaScript -->
+                </div>
+                <div class="alert alert-light border py-2 px-3 rounded-3 small text-muted d-flex align-items-center justify-content-center gap-2 mb-0" style="font-size: 0.78rem; background-color: #f8fafc;">
+                    <i class="bi bi-info-circle-fill text-primary flex-shrink-0"></i>
+                    <span class="text-start">Item dapat dipulihkan kembali oleh Administrator melalui menu Recycle Bin jika diperlukan.</span>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pb-4 px-4 pt-1 d-flex justify-content-center gap-2">
+                <button type="button" class="btn btn-light rounded-pill px-4 py-2 text-secondary fw-medium shadow-sm" data-bs-dismiss="modal">
+                    Batal
+                </button>
+                <button type="button" id="confirmBatchDeleteBtn" onclick="submitBatchDelete()" class="btn btn-danger rounded-pill px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border: none;">
+                    <i class="bi bi-trash3-fill"></i>
+                    <span id="batchDeleteBtnLabel">Ya, Pindahkan Semua</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+function openBatchDeleteConfirm() {
+    if (!window.selectedDocIds || window.selectedDocIds.size === 0) return;
+
+    const count = window.selectedDocIds.size;
+    const countNoticeEl = document.getElementById('batchDeleteCountNotice');
+    const itemsListEl = document.getElementById('batchDeleteItemsList');
+    const labelEl = document.getElementById('batchDeleteBtnLabel');
+
+    if (countNoticeEl) countNoticeEl.textContent = count + ' item';
+    if (labelEl) labelEl.textContent = 'Ya, Pindahkan ' + count + ' Item';
+
+    if (itemsListEl) {
+        itemsListEl.innerHTML = '';
+        window.selectedDocIds.forEach(id => {
+            const checkbox = document.querySelector(`.doc-checkbox[value="${id}"]`);
+            const name = checkbox ? checkbox.getAttribute('data-doc-name') : 'Item #' + id;
+            const isFolder = checkbox && checkbox.getAttribute('data-is-folder') === 'true';
+
+            const itemEl = document.createElement('div');
+            itemEl.className = 'batch-delete-item-pill';
+            itemEl.innerHTML = `
+                <i class="bi ${isFolder ? 'bi-folder-fill text-warning' : 'bi-file-earmark-text text-danger'} fs-6 flex-shrink-0"></i>
+                <span class="text-truncate flex-grow-1 fw-medium text-dark">${escapeHtml(name)}</span>
+                <span class="badge ${isFolder ? 'bg-warning-subtle text-warning border border-warning-subtle' : 'bg-light text-muted border'} rounded-pill" style="font-size: 0.68rem;">${isFolder ? 'Folder' : 'Berkas'}</span>
+            `;
+            itemsListEl.appendChild(itemEl);
+        });
+    }
+
+    const modalEl = document.getElementById('batchDeleteConfirmModal');
+    if (modalEl) {
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+    }
+}
+
+function submitBatchDelete() {
+    if (!window.selectedDocIds || window.selectedDocIds.size === 0) return;
+
+    const btn = document.getElementById('confirmBatchDeleteBtn');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status"></span> Memproses...';
+    }
+
+    const ids = Array.from(window.selectedDocIds);
+
+    fetch("{{ url('data-File/batch-delete') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            doc_ids: ids
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-trash3-fill"></i> <span>Ya, Pindahkan Semua</span>';
+        }
+
+        const modalEl = document.getElementById('batchDeleteConfirmModal');
+        if (modalEl) {
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+        }
+
+        if (data.success) {
+            ids.forEach(id => {
+                const row = document.querySelector(`tr[data-doc-id="${id}"]`);
+                if (row) {
+                    row.style.transition = 'all 0.3s ease';
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(-20px)';
+                    setTimeout(() => row.remove(), 300);
+                }
+            });
+
+            clearBatchSelection();
+            showActionToast(data.message || `${ids.length} item berhasil dipindahkan ke Tempat Sampah.`);
+
+            // Jika semua baris di tabel sudah habis terhapus, reload setelah sedikit jeda
+            setTimeout(() => {
+                const remainingRows = document.querySelectorAll('#document-table-body tr.document-row');
+                if (remainingRows.length === 0) {
+                    window.location.reload();
+                }
+            }, 600);
+        } else {
+            alert(data.message || 'Gagal menghapus beberapa berkas.');
+        }
+    })
+    .catch(err => {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-trash3-fill"></i> <span>Ya, Pindahkan Semua</span>';
+        }
+        console.error(err);
+        alert('Terjadi kesalahan saat memindahkan berkas.');
+    });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function showActionToast(message, isSuccess = true) {
+    const existing = document.getElementById('actionToastWidget');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.id = 'actionToastWidget';
+    toast.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-4 px-4 py-2 bg-dark text-white rounded-pill shadow-lg small fw-medium d-flex align-items-center gap-2';
+    toast.style.zIndex = '9999';
+    toast.style.animation = 'fadeIn 0.25s ease';
+    toast.innerHTML = `<i class="bi ${isSuccess ? 'bi-check-circle-fill text-success' : 'bi-exclamation-triangle-fill text-danger'}"></i> <span>${escapeHtml(message)}</span>`;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, 3200);
+}
+
 function openDeleteConfirm(actionUrl, itemName, isFolder) {
     const form = document.getElementById('deleteConfirmForm');
     const nameEl = document.getElementById('deleteConfirmItemName');
